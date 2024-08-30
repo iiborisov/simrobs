@@ -1,0 +1,17 @@
+name: simrobs
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10.12
+  - pip
+  - ipykernel
+  - conda-forge::pinocchio 
+  - mujoco
+  - pip:
+    - numpy==1.26.4
+    - matplotlib
+    - jupyterlab
+    - meshcat
+    - yourdfpy
+    - mujoco-python-viewer
