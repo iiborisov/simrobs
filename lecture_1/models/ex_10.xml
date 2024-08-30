@@ -1,0 +1,23 @@
+<mujoco>
+
+<option gravity = "0 0 -9.81"/>
+
+<worldbody>
+    <light diffuse=".5 .5 .5" pos="0 0 2" dir="0 0 -1"/>
+    <body name="worldplane">
+        <geom type = "box" size = "1 1 .01" rgba =".8 .1 .1 1"/>    
+    </body>
+
+    <body name = "falling ball" pos = "0 0 1">
+        <joint type = "free"/>
+        <geom type = "sphere" size = ".15" rgba = ".1 .8 .1 1" mass = "1"/>
+    </body>
+    
+    <body name="springy_ball" pos = "0 .5 1">
+        <joint type = "free" stiffness = "20" damping = "1"/>
+        <geom type = "sphere" size = ".1" rgba = ".1 .1 .8 1" mass = "1"/>
+    </body>
+     
+</worldbody>
+
+</mujoco>

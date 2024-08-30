@@ -1,0 +1,49 @@
+<mujoco>
+
+	<option gravity="0 0 -9.8" timestep="0.002" />
+
+    <asset>
+		<material name = "torso" rgba = ".76 .66 .9 1" />
+		<material name = "link1" rgba = ".56 .46 .5 1" />
+		<material name = "link2" rgba = ".76 .66 .7 1" />
+    	<texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .8 1" width="256" height="256"/>
+    </asset>
+
+	<worldbody>
+        <light diffuse=".7 .7 .7" pos="0 0 3" dir="0 0 -10"/>
+		<geom type="plane" size="1 1 0.1" rgba=".95 .95 .95 1"/>
+		
+		<!-- <body pos = "0 0 0.35"> -->
+			<!-- <joint type = "slide" axis="0 0 1" pos="0 0 0"/> -->
+			<!-- <geom type="box" size=".08 .16 .08" material = "torso" mass="10"/> -->
+		<body pos="0 -.18 -0.12" euler ="90 0 0">
+			<joint name="jointA" type = "hinge" axis="0 0 1" pos="0 .125 0"/>
+			<geom type="box" size=".026 .12 .016" material ="link1" mass="2"/>
+			<geom type="cylinder" size=".026 .016" pos="0 .12 0" material ="link1"/>
+			<geom type="cylinder" size=".026 .016" pos="0 -.12 0" material ="link1"/>
+			<body pos="0 -.24 .032">
+				<joint name="jointB" type = "hinge" axis="0 0 1" pos="0 .125 0"/>
+				<geom type="box" size=".026 .12 .016" material = "link2" mass = "1"/>
+				<geom type="cylinder" size=".026 .016" pos="0 .12 0" material ="link2"/>
+				<geom type="cylinder" size=".026 .016" pos="0 -.12 0" material ="link2"/>
+				<site name='tip' size = "0.025" pos = "0 -.12 0" material ="link2"/>
+			</body>
+		</body>
+		<!-- </body> -->
+
+	</worldbody>
+
+    <actuator>
+		<motor name="torqueA" joint="jointA"  gear="1" ctrllimited="true" ctrlrange="-10 10"/>
+		<position name ="pos_servoA" joint="jointA" kp="0"/>
+		<velocity name ="vel_servoA" joint="jointA" kv="0"/>
+		<motor name="torqueB" joint="jointB"  gear="1" ctrllimited="true" ctrlrange="-10 10"/>
+		<position name ="pos_servoB" joint="jointB" kp="0"/>
+		<velocity name ="vel_servoB" joint="jointB" kv="0"/>
+    </actuator>
+	
+	<sensor>
+		<framepos objtype="site" objname="tip"/>
+	</sensor>
+
+</mujoco>
