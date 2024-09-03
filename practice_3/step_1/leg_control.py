@@ -2,30 +2,11 @@ import mujoco as mj
 from mujoco.glfw import glfw
 import numpy as np
 import os
+from matplotlib import pyplot as plt
 
-""" It is a template of Pranav Bhounsule
-
-    The playlist of his lectures on MuJoCo can be found here 
-    https://youtube.com/playlist?list=PLc7bpbeTIk75dgBVd07z6_uKN1KQkwFRK&si=OplfsMvbiLXcZYtB
-
-    Video with position control 
-    https://youtu.be/SJQZKZsvRRE?si=aaB4R6KGR8E7dlKD
-
-    Original code here 
-    tiny.cc/mujoco
-
-    What is the difference with the original template?
-    https://pab47.github.io/mujoco/startercode/template.zip
-
-    (1) I have chnaged the name of xml file 
-    (2) Filled in def controller
-        The leg changes the initial state using TORQUE control 
-
- """
-
-
-xml_file_name = 'open_chain_leg.xml'
-simend = 10  # simulation time
+# xml file (assumes this is in the same folder as this file)
+xml_path = 'scene.xml'
+simend = 5  # simulation time
 print_camera_config = 0  # set to 1 to print camera config
 # this is useful for initializing view of the model)
 
@@ -42,13 +23,6 @@ def init_controller(model, data):
     pass
 
 
-def set_torque_servo(actuator_no, flag):
-    if (flag == 0):
-        model.actuator_gainprm[actuator_no, 0] = 0
-    else:
-        model.actuator_gainprm[actuator_no, 0] = 1
-
-
 def set_position_servo(actuator_no, kp):
     model.actuator_gainprm[actuator_no, 0] = kp
     model.actuator_biasprm[actuator_no, 1] = -kp
@@ -59,23 +33,19 @@ def set_velocity_servo(actuator_no, kv):
     model.actuator_biasprm[actuator_no, 2] = -kv
 
 
-def controller(model, data):
-    # put the controller here. This function is called inside the simulation.
-    # pass
+def pos_controller(model, data, ref, i):
+    # this function is called inside the simulation.
 
     # position control; position/velocity servo
-    # set_position_servo(1, 100)
-    # set_velocity_servo(2, 10)
-    # data.ctrl[1] = np.pi/2  # position
+    set_position_servo(1, 1e3)
+    set_velocity_servo(2, 1e1)
+    # data.ctrl[1] = np.pi/4
+    data.ctrl[1] = ref[0][i]
 
-    # set_position_servo(4, 100)
-    # # set_velocity_servo(5, 10)
-    # data.ctrl[4] = np.pi/2  # position
-
-    # torque control
-    set_torque_servo(0, 1)
-    data.ctrl[0] = 100*(np.pi/2-data.qpos[0]) + 10*(0.5-data.qvel[0])
-    data.ctrl[3] = 100*(np.pi/2-data.qpos[1]) + 10*(0.5-data.qvel[1])
+    set_position_servo(4, 1e3)
+    set_velocity_servo(5, 1e1)
+    # data.ctrl[4] = -np.pi/2
+    data.ctrl[4] = ref[1][i]
 
 
 def keyboard(window, key, scancode, act, mods):
@@ -154,10 +124,11 @@ def scroll(window, xoffset, yoffset):
 
 # get the full path
 dirname = os.path.dirname(__file__)
-abspath = os.path.join(dirname + "/" + xml_file_name)
+abspath = os.path.join(dirname + "/" + xml_path)
+xml_path = abspath
 
 # MuJoCo data structures
-model = mj.MjModel.from_xml_path(abspath)  # MuJoCo model
+model = mj.MjModel.from_xml_path(xml_path)  # MuJoCo model
 data = mj.MjData(model)                # MuJoCo data
 cam = mj.MjvCamera()                        # Abstract camera
 opt = mj.MjvOption()                        # visualization options
@@ -181,30 +152,91 @@ glfw.set_mouse_button_callback(window, mouse_button)
 glfw.set_scroll_callback(window, scroll)
 
 # Example on how to set camera configuration
-cam.azimuth = 45
-cam.elevation = -35
-cam.distance = 3
-cam.lookat = np.array([0.0, 0.0, 0])
+cam.azimuth = 90
+cam.elevation = -40
+cam.distance = 2.5
+cam.lookat = np.array([0.0, 0.0, 0.5])
 
 # initialize the controller
 init_controller(model, data)
 
-# set the controller
-mj.set_mjcb_control(controller)
+# set reference
+i = 0
+time = 0
+N = 60*simend
+tt = np.linspace(0, simend, N)
+freq = 5
+ref = [np.pi/12 * np.sin(freq * tt) + np.pi/4,
+       -np.pi/6 * np.sin(freq * tt) - np.pi/2]
+
+x_ee_all = []
+z_ee_all = []
+theta1_all = []
+theta2_all = []
+
+# set initial angles
+data.qpos[1] = 0.78  # set position
+data.qpos[2] = -1.57  # set position
+mj.mj_forward(model, data)
 
 while not glfw.window_should_close(window):
     time_prev = data.time
 
     while (data.time - time_prev < 1.0/60.0):
+        tip = data.site_xpos[0]
+
+        x_ee_all.append(tip[0])
+        z_ee_all.append(tip[2])
+
+        theta1 = data.qpos[1]
+        theta2 = data.qpos[2]
+
+        theta1_all.append(theta1)
+        theta2_all.append(theta2)
+
+        pos_controller(model, data, ref, i)
+
         mj.mj_step(model, data)
+        time += 0.01
+
+    i += 1
 
     if (data.time >= simend):
+        plt.figure(1)
+        plt.title("EE position")
+        plt.plot(x_ee_all, z_ee_all, label='sim')
+        plt.ylabel("y")
+        plt.xlabel("x")
+        plt.show(block=False)
+        plt.gca().set_xlim([-0.1, 0.1])
+        # plt.gca().set_aspect('equal')
+        plt.legend()
+
+        plt.figure(2)
+        ttt = np.linspace(0, simend, len(theta1_all))
+        plt.title("Angular positions")
+        plt.plot(ttt, theta1_all, label='q1')
+        plt.plot(tt, ref[0], label='ref 1')
+        plt.plot(ttt, theta2_all, label='q2')
+        plt.plot(tt, ref[1], label='ref 2')
+        plt.ylabel("q")
+        plt.xlabel("t")
+        plt.show(block=False)        
+        # plt.gca().set_aspect('equal')
+        plt.legend()
+
+        plt.pause(15)
+        plt.close()
         break
 
     # get framebuffer viewport
     viewport_width, viewport_height = glfw.get_framebuffer_size(
         window)
     viewport = mj.MjrRect(0, 0, viewport_width, viewport_height)
+
+    print(
+        f"Height is {data.qpos[0]:.2f}, q1={data.qpos[1]:.2f}, q2={data.qpos[2]:.2f}")
+    print(data.site_xpos[0])
 
     # print camera configuration (help to initialize the view)
     if (print_camera_config == 1):

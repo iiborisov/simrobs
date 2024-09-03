@@ -1,4 +1,4 @@
-<mujoco model="open_chain_leg">
+<mujoco model="open_chain_robot">
 	<option gravity="0 0 -9.81" timestep="0.002" />
     <asset>
 		<material name = "torso" rgba = ".76 .66 .9 1" />
@@ -9,8 +9,7 @@
 	<worldbody>
         <light diffuse=".7 .7 .7" pos="0 0 3" dir="0 0 -10"/>
 		<geom type="plane" size="1 1 0.1" rgba=".95 .95 .95 1"/>
-		
-		<body pos = "0 0 .65">
+		<body pos = "0 0 .5">
 			<geom type="box" size=".08 .16 .08" material = "torso" mass="10"/>
 			<body pos="0 -.18 -0.12" euler ="90 0 0">
 				<joint name="jointA" type = "hinge" axis="0 0 1" pos="0 .125 0"/>
