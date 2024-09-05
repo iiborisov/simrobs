@@ -1,0 +1,14 @@
+<mujoco>
+    <option gravity = "0 0 -9.81" timestep = "0.002"/>
+	<worldbody>
+        <light diffuse=".5 .5 .5" pos="0 0 2" dir="0 0 -1"/>
+		<geom type="plane" size="1 1 0.1" rgba=".9 0 0 1"/>
+
+        <body pos="0.05 0 0.5">
+            <joint type = "free"/>
+            <geom type = "sphere" size=".1" rgba=".7 .7 .7 1" mass = "1"/>
+            
+        </body>
+        
+	</worldbody>
+</mujoco>
