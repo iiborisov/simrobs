@@ -30,7 +30,7 @@
             <!-- резиновый коврик -->
             <geom type="box" size="0.2 0.15 0.005" pos="0.0 -0.2 0.15" density="7700.0" rgba="0.1 0.1 0.1 1.0"/>
             
-            <body name="cart" pos="0.0325 -0.14 1.0">
+            <body name="cart" pos="0.0325 -0.14 0.75">
                 <!-- каретка; к ней подсоединена вся нога -->
                 <geom type="mesh" mesh="cart" euler="0.0 -180.0 -90.0" mass="0.2" rgba="0.9 0.2 0.2 1.0" class="mockup"/>
                 <joint name="rail" type="slide" range="-0.5 0.5"/>

@@ -8,9 +8,11 @@ import mujoco_viewer
 
 # xml file (assumes this is in the same folder as this file)
 xml_path = 'scene.xml'
-simend = 10  # simulation time
+simend = 100  # simulation time
 print_camera_config = 0  # set to 1 to print camera config
 # this is useful for initializing view of the model)
+TIMESTEP = 0.005
+NUMSTEP = int(simend/TIMESTEP)
 
 # For callback functions
 button_left = False
@@ -57,10 +59,8 @@ def pos_controller(model, data, ref, i):
 
     # torque control
     set_torque_servo(0, 1)
-    data.ctrl[0] = 150*(ref[0][i]-data.joint('hip').qpos) + \
-        1*(0.5-data.joint('hip').qvel)
-    data.ctrl[3] = 150*(ref[1][i]-data.joint('joint_knee_lever').qpos) + \
-        1*(0.5-data.joint('joint_knee_lever').qvel)
+    data.ctrl[0] = 150*(ref[0][i]-data.joint('hip').qpos) + 1*(0.-data.joint('hip').qvel)
+    data.ctrl[3] = 150*(ref[1][i]-data.joint('joint_knee_lever').qpos) + 1*(0.-data.joint('joint_knee_lever').qvel)
 
 
 def keyboard(window, key, scancode, act, mods):
@@ -178,11 +178,11 @@ init_controller(model, data)
 # set reference
 i = 0
 time = 0
-N = 60*simend
-tt = np.linspace(0, simend, N)
-freq = 1.25
-ref = [np.pi/12 * np.sin(2*np.pi * freq * tt) - np.deg2rad(45),
-       -np.pi/6 * np.sin(2*np.pi * freq * tt) + np.deg2rad(110)]
+# N = 60*simend
+tt = np.linspace(0, simend, NUMSTEP)
+freq = 2*np.pi*0.1
+ref = [np.pi/12 * np.sin(freq * tt) - np.deg2rad(45),
+       -np.pi/6 * np.sin(freq * tt) + np.deg2rad(110)]
 
 # # knee_lever_ref = (ref[1] + np.deg2rad(220))/2
 # knee_lever_ref = ref[1]/2 + np.deg2rad(110)
@@ -207,91 +207,91 @@ mj.mj_forward(model, data)
 viewer = mujoco_viewer.MujocoViewer(model, data)
 
 # simulate and render
-for _ in range(100000000):
+for _ in range(NUMSTEP):
     if viewer.is_alive:
 
-        time_prev = data.time
+        # time_prev = data.time
 
-        while (data.time - time_prev < 1.0/60.0):
+        # while (data.time - time_prev < 1.0/60.0):
 
-            tip = data.site_xpos[0]
+        # tip = data.site_xpos[0]
 
-            x_ee_all.append(tip[0])
-            z_ee_all.append(tip[2])
+        # x_ee_all.append(tip[0])
+        # z_ee_all.append(tip[2])
 
-            theta1 = float(data.joint('hip').qpos)
-            theta2 = float(data.joint('joint_knee_lever').qpos)
+        # theta1 = float(data.joint('hip').qpos)
+        # theta2 = float(data.joint('joint_knee_lever').qpos)
 
-            # tau1 = data.joint('hip').frc
-            # tau2 = data.joint('joint_knee_lever').frc
+        # tau1 = data.joint('hip').frc
+        # tau2 = data.joint('joint_knee_lever').frc
 
-            theta1_all.append(theta1)
-            theta2_all.append(theta2)
+        # theta1_all.append(theta1)
+        # theta2_all.append(theta2)
 
-            # tau1_all.append(tau1)
-            # tau2_all.append(tau2)
+        # tau1_all.append(tau1)
+        # tau2_all.append(tau2)
 
-            pos_controller(model, data, ref, i)
+        pos_controller(model, data, ref, i)
 
-            mj.mj_step(model, data)
-            time += 0.01
+        mj.mj_step(model, data)
+            # time += 0.01
 
         i += 1
 
-        if (data.time >= simend):
-            plt.figure(1)
-            plt.title("EE position")
-            plt.plot(x_ee_all, z_ee_all, label='sim')
-            plt.ylabel("y")
-            plt.xlabel("x")
-            plt.show(block=False)
-            plt.gca().set_xlim([-0.1, 0.1])
-            # plt.gca().set_aspect('equal')
-            plt.grid(color='#808080', linestyle='-', linewidth=0.5)
-            plt.legend()
+        # if (data.time >= simend):
+        #     plt.figure(1)
+        #     plt.title("EE position")
+        #     plt.plot(x_ee_all, z_ee_all, label='sim')
+        #     plt.ylabel("y")
+        #     plt.xlabel("x")
+        #     plt.show(block=False)
+        #     plt.gca().set_xlim([-0.1, 0.1])
+        #     # plt.gca().set_aspect('equal')
+        #     plt.grid(color='#808080', linestyle='-', linewidth=0.5)
+        #     plt.legend()
 
-            plt.figure(2)
-            ttt = np.linspace(0, simend, len(theta1_all))
-            plt.title("Angular positions")
-            plt.plot(ttt, theta1_all, label='q1')
-            plt.plot(tt, ref[0], label='ref 1')
-            plt.plot(ttt, theta2_all, label='q2')
-            plt.plot(tt, ref[1], label='ref 2')
-            plt.ylabel("q")
-            plt.xlabel("t")
-            plt.show(block=False)
-            # plt.gca().set_aspect('equal')
-            plt.grid(color='#808080', linestyle='-', linewidth=0.5)
-            plt.legend()
+        #     plt.figure(2)
+        #     ttt = np.linspace(0, simend, len(theta1_all))
+        #     plt.title("Angular positions")
+        #     plt.plot(ttt, theta1_all, label='q1')
+        #     plt.plot(tt, ref[0], label='ref 1')
+        #     plt.plot(ttt, theta2_all, label='q2')
+        #     plt.plot(tt, ref[1], label='ref 2')
+        #     plt.ylabel("q")
+        #     plt.xlabel("t")
+        #     plt.show(block=False)
+        #     # plt.gca().set_aspect('equal')
+        #     plt.grid(color='#808080', linestyle='-', linewidth=0.5)
+        #     plt.legend()
 
-            # plt.figure(3)
-            # ttt = np.linspace(0, simend, len(tau1_all))
-            # plt.title("Torques")
-            # plt.plot(ttt, tau1_all, label='t1')
-            # plt.plot(ttt, tau2_all, label='t2')
-            # plt.ylabel("t")
-            # plt.xlabel("t")
-            # plt.show(block=False)
-            # # plt.gca().set_aspect('equal')
-            # plt.grid(color='r', linestyle='-', linewidth=2)
-            # plt.legend()
+        #     # plt.figure(3)
+        #     # ttt = np.linspace(0, simend, len(tau1_all))
+        #     # plt.title("Torques")
+        #     # plt.plot(ttt, tau1_all, label='t1')
+        #     # plt.plot(ttt, tau2_all, label='t2')
+        #     # plt.ylabel("t")
+        #     # plt.xlabel("t")
+        #     # plt.show(block=False)
+        #     # # plt.gca().set_aspect('equal')
+        #     # plt.grid(color='r', linestyle='-', linewidth=2)
+        #     # plt.legend()
 
-            plt.pause(15)
-            plt.close()
-            break
+        #     plt.pause(15)
+        #     plt.close()
+        #     break
 
         # print(f"Height is {data.qpos[0]:.2f}, q1={data.qpos[1]:.2f}, q2={data.qpos[2]:.2f}")
         # print(data.site_xpos[0])
         # print(f"Knee joint position is {data.qpos[4]} ")
-        print(f"Hip joint position is {data.joint('hip').qpos} ")
-        print(f"Knee joint position is {data.joint('joint_knee_lever').qpos} ")
+        # print(f"Hip joint position is {data.joint('hip').qpos} ")
+        # print(f"Knee joint position is {data.joint('joint_knee_lever').qpos} ")
 
         # print camera configuration (help to initialize the view)
-        if (print_camera_config == 1):
-            print('cam.azimuth =', cam.azimuth, ';', 'cam.elevation =',
-                  cam.elevation, ';', 'cam.distance = ', cam.distance)
-            print('cam.lookat =np.array([', cam.lookat[0],
-                  ',', cam.lookat[1], ',', cam.lookat[2], '])')
+        # if (print_camera_config == 1):
+        #     print('cam.azimuth =', cam.azimuth, ';', 'cam.elevation =',
+        #           cam.elevation, ';', 'cam.distance = ', cam.distance)
+        #     print('cam.lookat =np.array([', cam.lookat[0],
+        #           ',', cam.lookat[1], ',', cam.lookat[2], '])')
 
         viewer.render()
     else:
