@@ -1,7 +1,7 @@
 <mujoco model="open_chain_leg_scene">
     <compiler eulerseq="zyx" angle="degree" meshdir="./assets/" texturedir="./assets/" autolimits="true"/>
 
-    <option timestep="0.0005" gravity="0.0 0.0 -9.8"/>
+    <option timestep="0.005" gravity="0.0 0.0 -9.8"/>
     <!-- Timestep is set to 0.0005 because the standard controller runs at 2 kHz -->
     <!-- Larger values still have stable dynamics -->
     
