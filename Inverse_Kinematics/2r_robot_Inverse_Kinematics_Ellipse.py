@@ -7,6 +7,8 @@ import mujoco
 import mujoco_viewer
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+
 
 ### CONTROL
 def set_torque(mj_data, KP, KV, theta_1, theta_2, x_ref_diff, z_ref_diff):
@@ -17,7 +19,10 @@ def set_torque(mj_data, KP, KV, theta_1, theta_2, x_ref_diff, z_ref_diff):
     data.ctrl[0] = KP * error_1 + KV * (x_ref_diff - mj_data.qvel[0])
     data.ctrl[1] = KP * error_2 + KV * (z_ref_diff - mj_data.qvel[1])
 
-model = mujoco.MjModel.from_xml_path('2r_robot_PID.xml')
+
+PATH = os.path.abspath("")
+FOLDER_PATH = os.path.join(PATH, "Inverse_Kinematics")
+model = mujoco.MjModel.from_xml_path(FOLDER_PATH + '/' + '2r_robot_PID.xml')
 data = mujoco.MjData(model)
 
 
@@ -35,13 +40,15 @@ SIMEND = 10
 TIMESTEP = 0.002
 STEP_NUM = int(SIMEND/TIMESTEP)
 
-a = 1
-b = 0.5
+a = 0.5
+b = 0.25
+h = 0.5 # center of ellipse by z
+k = 0.5 # center of ellipse by x
 phi = np.linspace(0, 2*np.pi, 5000)
 psi = 1 # a parameter representing the slope of the tangent line
 
-x_ref = a * np.cos(phi) + a * psi * np.sin(phi)
-z_ref = b * np.sin(phi) - b * psi * np.cos(phi)
+x_ref =k + a * np.cos(phi) + a * psi * np.sin(phi)
+z_ref =h + b * np.sin(phi) - b * psi * np.cos(phi)
 
 x_ref_diff = np.diff(x_ref)
 z_ref_diff = np.diff(z_ref)
@@ -98,9 +105,11 @@ viewer.close()
 
 
 ### Plot end-effector movement Actual and Desired
-plt.plot(EE_position_x, EE_position_z, label='Actual')
-plt.plot(x_ref, z_ref, label='Reference')
-plt.legend()
+plt.plot(EE_position_x, EE_position_z, label='Actual trajectory', linewidth=4)
+plt.plot(x_ref, z_ref, '--', label='Reference trajectory')
+plt.legend(loc='upper left')
+plt.xlabel('X-Axis')
+plt.ylabel('Z-Axis')
 plt.axis('equal')
 plt.grid()
 plt.show()

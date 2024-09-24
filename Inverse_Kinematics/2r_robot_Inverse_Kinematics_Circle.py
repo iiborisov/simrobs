@@ -9,14 +9,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-PATH = os.path.abspath("")
-FOLDER_PATH = os.path.join(PATH, "Inverse_Kinematics")
 
 ### CONTROL
 def set_torque(mj_data, KP, KV, theta_1, theta_2):
     data.ctrl[0] = KP * (-mj_data.qpos[0] + theta_1) + KV * (0 - mj_data.qvel[0])
     data.ctrl[1] = KP * (-mj_data.qpos[1] + theta_2) + KV * (0 - mj_data.qvel[1])
 
+
+PATH = os.path.abspath("")
+FOLDER_PATH = os.path.join(PATH, "Inverse_Kinematics")
 model = mujoco.MjModel.from_xml_path(FOLDER_PATH + '/' + '2r_robot_PID.xml')
 data = mujoco.MjData(model)
 
@@ -93,16 +94,27 @@ viewer.close()
 
 
 ### Plot end-effector movement Actual and Desired
-plt.figure(1)
-plt.plot(EE_position_x, EE_position_z, label='Actual position')
-plt.plot(x_ref, z_ref, label='Reference position')
-plt.legend()
-plt.axis('equal')
-plt.legend()
+plt.suptitle('Inverse Kinematics', fontsize=19, fontweight='bold')
+
+plt.subplots_adjust(wspace= 1, 
+                    hspace= 1)
+
+plt.subplot(2, 1, 1)
+plt.plot(EE_position_x, EE_position_z, linewidth=4, label='Actual trajectory')
+plt.plot(x_ref, z_ref, '--', label='Reference trajectory')
+plt.title('End-effector trajectory', fontsize=12, fontweight='bold')
+plt.legend(loc='upper left')
+plt.xlabel('X-Axis [mm]')
+plt.ylabel('Z-Axis [mm]')
 plt.axis('equal')
 plt.grid()
 
-plt.figure(2)
-plt.plot(data_qpos_1)
+plt.subplot(2, 1, 2)
+plt.plot(data_qpos_1, label='joint_1 angle')
+plt.title('Joint_1 Angle', fontsize=12, fontweight='bold')
+plt.legend(loc='upper left')
+plt.xlabel('Time [sec]')
+plt.ylabel('Radians')
 plt.grid()
+
 plt.show()
