@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Tue Sep 24 12:10:32 2024
 WARNING: Nan, Inf or huge value in CTRL at ACTUATOR 0. The simulation is unstable. Time = 0.0000.
 
@@ -6,4 +7,14 @@ WARNING: Nan, Inf or huge value in CTRL at ACTUATOR 0. The simulation is unstabl
 
 Tue Sep 24 12:16:49 2024
 WARNING: Nan, Inf or huge value in CTRL at ACTUATOR 0. The simulation is unstable. Time = 0.0000.
+=======
+Tue Sep 24 16:08:14 2024
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 0.1250.
+
+Tue Sep 24 16:08:57 2024
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 0.1250.
+
+Tue Sep 24 16:09:46 2024
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 0.1250.
+>>>>>>> 6df82ec (hopping leg)
 
