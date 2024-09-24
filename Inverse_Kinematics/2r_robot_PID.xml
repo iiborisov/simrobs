@@ -1,0 +1,31 @@
+<mujoco>
+  <option gravity ="0 0 0" timestep="0.002"/>
+
+  <worldbody>
+    <light diffuse=".5 .5 .5" pos="0 0 3" dir="0 0 -1"/>
+
+    <body name='link_1'>
+      <joint name='joint_1' type='hinge' axis='0 -1 0' pos='0 0 0' damping='1'/>
+      <geom name='cylinder_1' type='cylinder' size='0.05 0.5' rgba='1 0 0 1' mass='1' pos = '0 0 0.5'/>
+
+      <body name='link_2' pos='0 0 1'>
+        <joint name='joint_2' type='hinge' axis='0 -1 0' pos='0 0 0' damping='1'/>
+        <geom name='cylinder_2' type='cylinder' size='0.05 0.5' rgba='0 1 0 1' mass='1' pos = '0 0 0.5'/>
+        <site name='end_effector' type='sphere' size='0.05' pos='0 0 1'/>
+      </body>
+
+    </body>
+    
+  </worldbody>
+
+  <sensor>
+    <framepos objtype='site' objname='end_effector'/>
+  </sensor>
+
+  <actuator>
+    <motor name='torque_1' joint='joint_1'/>
+
+    <motor name='torque_2' joint='joint_2'/>
+  </actuator>
+
+</mujoco>
