@@ -1,0 +1,46 @@
+<mujoco>
+
+    <option gravity="0 0 -9.8" timestep="0.005"/>
+
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .6 .6" width="265" height="256"/>
+        <material name="green" rgba=".5 .99 .5 1"/>
+        <material name="blue" rgba=".5 .5 .99 1"/>
+    </asset>
+
+    <worldbody>
+        <!-- <body euler = "90 0 0"> -->
+        <body pos="0 0 0">
+            <body pos = "0 0 0" euler = "90 0 0">
+                <joint name="joint0" type="hinge" axis="0 0 1" pos="0 0 0"/>
+                <geom type="box" size="0.1 .025 .015" pos="0.1 0 0"  material="green" density="4000"/>
+                <geom type="cylinder" size=".025 .015" material="green" mass="0"/>
+                <geom type="cylinder" size=".025 .015" material="green" mass="0" pos="0.2 0 0"/>  
+                <body pos = "0.2 0 0">
+                    <joint name="joint1" type="hinge"  axis="0 0 1" pos="0 0 0"/>
+                    <geom type="box" size="0.1 .02 .01" material="blue" density="4000" pos="0.1 0 0"/>
+                    <geom type="cylinder" size=".02 .01" material="blue" mass="0"/>
+                    <geom type="cylinder" size=".02 .01" material="blue" mass="0" pos="0.2 0 0"/>
+                    <site name='tip' size='0.015' pos='0.2 0 0' material="blue"/>
+                </body>
+            </body>        
+        </body>        
+
+    </worldbody>
+
+    <actuator>
+        <motor name="tau0" joint="joint0" ctrllimited="true" ctrlrange="-10 10"/>
+        <motor name="tau1" joint="joint1" ctrllimited="true" ctrlrange="-10 10"/>
+    </actuator>
+
+    <sensor>
+        <actuatorfrc name='act_tau0' actuator='tau0'/>
+        <actuatorfrc name='act_tau1' actuator='tau1'/>
+    </sensor>
+
+    <sensor>
+		<framepos objtype="site" objname="tip"/>
+	</sensor>
+
+</mujoco>
+    
