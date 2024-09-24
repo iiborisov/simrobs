@@ -1,4 +1,4 @@
-<mujoco model="open_chain_leg">
+<mujoco model="closed_chain_leg">
     <default>
         <geom contype="1" conaffinity="0" solref="0.0005 1.0"/>
 
@@ -34,42 +34,52 @@
 
                 <body name="pelvis" pos="-0.05 0.01 -0.085" euler = "0 0 90">
                     <geom type="box" size="0.045 0.085 0.01" density="750" material="pelvis" class="part"/>
-                    <geom type="cylinder" size="0.085 0.0275" pos="0 0 0.0375" zaxis="0 0 1" 
+                    <geom type="cylinder" size="0.085 0.0275" pos="0 0 0.0375" zaxis="0 0 1"
                         material="pelvis" mass="1.74" class="part"/>
                     
                     <body name="thigh" pos="0 0 0.1325" euler="-45 0 0">
-                    <!-- <body name="thigh" pos="0.0 -0.1325 0.0" euler="180 50 -90"> -->
-                        <!-- pos = box + 2cylinder + cylinder-->    
                         <geom type="cylinder" size="0.04 0.01" pos = "0 0 -0.0575" zaxis = "0 0 1"  rgba="0.45 0.45 0.75 0.25" class="part"/>
                         <geom type="cylinder" size="0.085 0.01" pos = "0 0 -0.0375" zaxis = "0 0 1"  rgba="0.45 0.45 0.75 .25" class="part"/> 
                         <geom type="cylinder" size="0.085 0.0275" pos="0.0 0.0 0.0" zaxis="0 0 1" mass="1.74" material="thigh" class="part"/>  
-                        <geom type="box" size="0.04 0.185 0.01" pos="0.0 0.185 0.0" density="2000" material="thigh" class="part"/>           
-                        <geom type="cylinder" size="0.04 0.01" pos="0 0.370 0" material="thigh" class="part"/>       
-                        <joint name="hip" type="hinge" ref="50" damping="0.256"/>
-                        <!-- <joint name="hip" type="hinge" ref="60" range="-45.0 90.0" damping="0.256"/> -->
+                        <geom type="box" size="0.185 0.04 0.01" pos="0.185 0 0.0" density="2000" material="thigh" class="part"/>           
+                        <geom type="cylinder" size="0.04 0.01" pos="0.370 0 0" material="thigh" class="part"/>       
+                        <joint name="hip" type="hinge" ref="-45" damping="0.01"/>
 
-                        <body name="shin" pos="0.0 0.370 -0.0475" euler="-90 0 0">
-                            <geom type="box" size="0.02 0.1565 0.015" pos="0.0 0.1565 0.0" density="2000" material="shin" class="part"/>
+                        <body name="shin" pos="0.370 0.0  -0.0475" euler="-90 0 0">
+                            <geom type="box" size="0.1565 0.02 0.015" pos="0.1565 0 0.0" density="2000" material="shin" class="part"/>
                             <geom type="cylinder" size="0.02 0.015" pos="0 0 0" material="shin" class="part"/>
-                            <geom type="cylinder" size="0.02 0.015" pos="0 .313 0" material="shin" class="part"/>
-                            <site name='tip' size = "0.025" pos = "0 .313 0" material ="shin"/>
-                            <joint name="knee" type="hinge" ref="-90" damping="0.256"/>
-                            <!-- <joint name="knee" type="hinge" ref="-115" range="-160.0 -40.0" damping="0.256"/> -->
-                            <body pos="0 0 0" euler = "110 0 0">
+                            <geom type="cylinder" size="0.02 0.015" pos=".313 0 0" material="shin" class="part"/>
+                            <site name='tip' size = "0.025" pos = ".313 0 0" material ="shin"/>
+                            <joint name="knee" type="hinge" ref="-90" damping="0.01"/>
+                            <body pos="0 0 0" euler = "20 0 0">
                                 <geom type="box" size="0.034 0.02 0.01" pos="-.034 0 0" material = "shin"  density="2000" class = "part"/>
                                 <geom type="cylinder" size=".02 .01" pos="-0.068 0 0" density="2000" material ="shin"/>
+                            </body>
+                        </body>
+                        <body name="knee_lever" pos="0.0 0 -0.0325" euler="110 0 0">
+                            <geom type="box" size=".034 .015 0.005" pos = ".034 0 0" material ="loop1" density="2000" zaxis = "0 0 1"  class="part"/>
+                            <geom type="cylinder" size=".015 0.005" pos="0.068 0 0" material ="loop1" zaxis = "0 0 1" density="5000" class="part"/>
+                            <joint name="joint_knee_lever" type = "hinge" axis="0 0 1" ref = "110"/>
+
+                            <body name = 'knee_rod' pos=".068 0 0" euler = "-110 0 0">
+                                <geom type="box" size=".185 .014 .0045 " pos = ".185 0 0" material ="loop1" density="2000" zaxis = "0 0 1"  class="part"/>
+                                <geom type="cylinder" size=".014 .0045" pos="0.370 0 0" material ="loop1" zaxis = "0 0 1" density="5000" class="part"/>
+                                <joint name="joint_knee_rod" type = "hinge" axis="0 0 1" ref = "-110"/>                  
                             </body>
                         </body>
                     </body>
                 </body>
             </body>
         </body>
-
     </worldbody>
 
+    <equality>
+        <connect name="shin_constrain" body1="shin" body2="knee_rod" anchor="-0.0639 -0.02326 0.0" solref="0.0005 1.0"/>
+    </equality>
+
    <actuator>
-		<motor name="torque_hip" joint="hip"  gear="10" ctrllimited="true" ctrlrange="-100 100"/>  
-		<motor name="torque_knee" joint="knee"  gear="10" ctrllimited="true" ctrlrange="-100 100"/>
+		<motor name="torque_hip" joint="hip"  gear="1" ctrllimited="true" ctrlrange="-100 100"/>
+		<motor name="torque_knee" joint="joint_knee_lever"  gear="1" ctrllimited="true" ctrlrange="-100 100"/>
     </actuator>
 
     <sensor>
@@ -81,8 +91,8 @@
         <actuatorvel name="hip_dq" actuator="torque_hip"/>
         <actuatorvel name="knee_dq" actuator="torque_knee"/>
 
-        <actuatorfrc name="hip_trq" actuator="torque_hip"/>
-        <actuatorfrc name="knee_trq" actuator="torque_knee"/>
+        <actuatorfrc name='act_torque_hip' actuator="torque_hip"/>
+        <actuatorfrc name='act_torque_knee' actuator="torque_knee"/>
     </sensor>
 
 </mujoco>
