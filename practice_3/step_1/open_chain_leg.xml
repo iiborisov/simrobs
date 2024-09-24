@@ -1,4 +1,4 @@
-<mujoco model="leg_two">
+<mujoco model="open_chain_leg">
     <default>
         <geom contype="1" conaffinity="0" solref="0.005 1.0"/>
 
@@ -148,12 +148,12 @@
 
    <actuator>
 		<motor name="torque_hip" joint="hip"  gear="1" ctrllimited="true" ctrlrange="-100 100"/>
-		<position name ="pos_servo_hip" joint="hip" kp="0"/>
-		<velocity name ="vel_servo_hip" joint="hip" kv="0"/>
+		<!-- <position name ="pos_servo_hip" joint="hip" kp="0"/> -->
+		<!-- <velocity name ="vel_servo_hip" joint="hip" kv="0"/> -->
         
 		<motor name="torque_knee" joint="knee"  gear="1" ctrllimited="true" ctrlrange="-100 100"/>
-		<position name ="pos_servo_knee" joint="knee" kp="0"/>
-		<velocity name ="vel_servo_knee" joint="knee" kv="0"/>
+		<!-- <position name ="pos_servo_knee" joint="knee" kp="0"/> -->
+		<!-- <velocity name ="vel_servo_knee" joint="knee" kv="0"/> -->
         
         <!-- <motor name="hip_motor" joint="hip" gear="8.66" ctrlrange="-16.16 16.16"/> -->
         <!-- <motor name="knee_motor" joint="knee" gear="8.66" ctrlrange="-16.16 16.16"/> -->
