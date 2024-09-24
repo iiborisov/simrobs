@@ -5,7 +5,7 @@
     <!-- Timestep is set to 0.0005 because the standard controller runs at 2 kHz -->
     <!-- Larger values still have stable dynamics -->
     
-    <include file="leg_like_op.xml"/>
+    <include file="closed_chain_leg.xml"/>
 
     <statistic center="0 0 0.55" extent="1.1"/>
 
