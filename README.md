@@ -38,7 +38,7 @@ conda env create -f environment.yml
 ```
 Next, activate the environment:  
 ```bash
-conda activate mds
+conda activate simrobs
 ```
 
 More information about virtual environments you can find [here](https://docs.anaconda.com/working-with-conda/environments/).
