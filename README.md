@@ -34,5 +34,11 @@ First, you need to install `conda` package manager. Use one of the suggested [in
 
 After installing conda, set up the virtual environment by running the following command in the terminal
 ```bash
-   conda env create -f environment.yml
+conda env create -f environment.yml
 ```
+Next, activate the environment:  
+```bash
+conda activate mds
+```
+
+More information about virtual environments you can find [here](https://docs.anaconda.com/working-with-conda/environments/).
