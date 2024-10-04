@@ -1,0 +1,11 @@
+digraph {
+	node [shape=none]
+	edge [dir=both]
+	force [label="Se: F"]
+	friction [label="R: k_f"]
+	inertia [label="I: m"]
+	mass_object [label=1]
+	force -> mass_object [arrowhead=teelvee arrowtail=none len=2]
+	mass_object -> friction [arrowhead=lvee arrowtail=tee len=2]
+	mass_object -> inertia [arrowhead=teelvee arrowtail=none len=2]
+}
