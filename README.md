@@ -4,7 +4,7 @@ Students: Robotics and artificial intelligence
 
 Instructor: Ivan Borisov, PhD, borisovii@itmo.ru 
 
-Assistant: Egor Rakshin, PhD, [earakshin@itmo.ru](mailto:earakshin@itmo.ru)
+Assistant: Egor Rakshin, MSc, earakshin@itmo.ru
 
 ## Description
 Modern robotic and mechatronic systems are complex in terms of all domains: mechanics, sensors, actuation, control, etc. To study the behavior and performance of an existing robotic system or a proposed one, we use models to focus on the essential features while keeping a reasonable tradeoff between realism and simplicity.  The act of building a model is called modeling, while the process of using a model to study the behavior and performance of an actual or theoretical system is called simulation.
@@ -30,8 +30,15 @@ After the module the student:
 - Featherstone, Roy. Rigid body dynamics algorithms. Springer, 2014.
 
 # Environment installation 
-Use the following command to install environment
+First, you need to install `conda` package manager. Use one of the suggested [instructions](https://docs.anaconda.com/anaconda/install/) depending on your OS.
+
+After installing conda, set up the virtual environment by running the following command in the terminal
 ```bash
-   conda env create -f environment.yml
+conda env create -f environment.yml
+```
+Next, activate the environment:  
+```bash
+conda activate simrobs
 ```
 
+More information about virtual environments you can find [here](https://docs.anaconda.com/working-with-conda/environments/).
