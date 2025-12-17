@@ -63,4 +63,9 @@ Next, activate the environment:
 conda activate simrobs
 ```
 
-More information about virtual environments you can find [here](https://docs.anaconda.com/working-with-conda/environments/).
+## Fix import visibility  
+
+```bash
+pybind11-stubgen mujoco
+```
+ 

@@ -23,5 +23,6 @@
         "--style",
         ".style.yapf"
     ],
-    "cSpell.language": "en,ru"
+    "cSpell.language": "en,ru",
+    "python.analysis.stubPath": "stubs",
 }

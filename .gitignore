@@ -167,3 +167,4 @@ cython_debug/
 *MJDATA*
 *MUJOCO_LOG*
 .DS_Store
+stubs
