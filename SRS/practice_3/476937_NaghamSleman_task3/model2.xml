@@ -1,0 +1,113 @@
+<mujoco model="RR_Mechanism">
+
+    <option gravity="0 0 0" integrator="Euler"/>
+
+    <statistic center="0 0 0" extent="0.2"/>
+
+    <visual>
+        <rgba haze=".8 .3 .3 1"/>
+    </visual>
+
+    <default>
+        <joint axis="0 1 0" damping="0.000005"/>
+        <geom type="capsule"/>
+    </default>
+
+    <asset>
+        <texture name="texplane" type="2d" builtin="checker"
+                 rgb1=".7 .7 .25" rgb2=".25 .7 .7"
+                 width="512" height="512" mark="cross" markrgb=".8 .8 .8"/>
+        <material name="matplane" reflectance="0" texture="texplane"
+                  texrepeat="1 1" texuniform="true"/>
+    </asset>
+
+    <worldbody>
+
+        <light pos="0 0 0.25" />
+        <light pos="0 0 3" dir="0 0 -1" directional="false" />
+
+        <geom name="floor" pos="0 0 -0.14" size="0 0 1"
+              type="plane" material="matplane" conaffinity="15" condim="3"/>
+
+        <!-- LEFT SIDE -->
+        <body pos="0 0 0">
+            
+            <geom name="left_bound" type="box" size="0.002 0.06 0.06"
+                  rgba="0.1 0.1 0.7 1" pos="0 0 0"/>
+
+            <geom fromto="0 0 0 0.094 0 0"
+                  rgba=".5 .5 .1 .5" size=".002"
+                  contype="0" conaffinity="0"/>
+
+            <site name="s1" pos="0.005 0 0.035" size=".002" rgba="1 1 0 1"/>
+            <site name="s2" pos="0.005 0 -0.035" size=".002" rgba="1 1 0 1"/>
+
+            <!-- FIRST JOINT (ELBOW) -->
+            <body pos="0.094 0 0">
+                
+                <joint name="elbow"/>
+
+                <geom fromto="0 0 0 0.063 0 0"
+                      rgba=".5 .5 .1 .5" size=".002"/>
+
+                <geom name="Pulley" type="cylinder"
+                      fromto="0 .007 0 0 -.007 0"
+                      size=".014" rgba=".1 .1 .75 .85"/>
+
+                <site name="s3" pos="0 0 0.015" size=".002" rgba="1 1 0 1"/>
+                <site name="s4" pos="0 0 -0.015" size=".002" rgba="1 1 0 1"/>
+
+                <!-- SECOND JOINT (WRIST) -->
+                <body pos="0.063 0 0">
+
+                    <joint name="wrist"/>
+
+                    <geom fromto="0 0 0 0.088 0 0"
+                          rgba=".5 .5 .1 .5" size=".002"/>
+
+                    <geom name="Pulley2" type="cylinder"
+                          fromto="0 .01 0 0 -.01 0"
+                          size=".02" rgba=".1 .1 .75 .85"/>
+
+                    <site name="s5" pos="0 0 0.021" size=".002" rgba="1 1 0 1"/>
+                    <site name="s6" pos="0 0 -0.021" size=".002" rgba="1 1 0 1"/>
+                    <site name="s7" pos="0.088 0 0.035" size=".002" rgba="1 1 0 1"/>
+                    <site name="s8" pos="0.088 0 -0.035" size=".002" rgba="1 1 0 1"/>
+
+                    <!-- RIGHT SIDE -->
+                    <body>
+                        <geom name="right_bound" type="box"
+                              size="0.002 0.055 0.055"
+                              rgba="0.1 0.1 0.7 1"
+                              pos="0.088 0 0"/>
+                    </body>
+
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <!-- TENDONS -->
+    <tendon>
+
+        <!-- RED SPATIAL TENDON -->
+        <spatial stiffness="10" rgba="1 0 0 1" width="0.0015">
+            <site site="s1"/>
+            <geom geom="Pulley" sidesite="s3"/>
+            <site site="s3"/>
+            <geom geom="Pulley2" sidesite="s6"/>
+            <site site="s8"/>
+        </spatial>
+
+        <!-- GREEN SPATIAL TENDON -->
+        <spatial stiffness="10" rgba="0 1 0 1" width="0.0015">
+            <site site="s2"/>
+            <geom geom="Pulley" sidesite="s4"/>
+            <site site="s4"/>
+            <geom geom="Pulley2" sidesite="s5"/>
+            <site site="s7"/>
+        </spatial>
+
+    </tendon>
+
+</mujoco>

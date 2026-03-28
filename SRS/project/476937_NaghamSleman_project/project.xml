@@ -1,0 +1,164 @@
+<mujoco model="hybrid_robot">
+    <compiler angle="degree" coordinate="local"/>
+    <option gravity="0 0 -9.81" timestep="0.004"/>
+
+    <default>
+        <joint damping="2" armature="0.01"/>
+        <geom density="600" friction="1.2 0.02 0.002"/>
+    </default>
+
+    <worldbody>
+
+        <!-- Ground -->
+        <geom type="plane" size="30 30 0.2" rgba="0.9 0.9 0.9 1"/>
+
+        <!-- ======================================================= -->
+        <!--     BODY ELEVATION JOINT              -->
+        <!-- ======================================================= -->
+        <body name="body_elevator" pos="0 0 0.40">
+            <joint name="elevate" type="slide" axis="0 0 1" range="-0.10 0.12"/>
+
+            <!-- ================= TORSO ================= -->
+            <body name="torso" pos="0 0 0">
+                <geom type="box" size="0.30 0.25 0.09" rgba="0.2 0.4 0.75 1"/>
+
+                <!-- ======================================================= -->
+                <!--                 WHEELS              -->
+                <!-- ======================================================= -->
+
+                <!-- أصبحت مرتفعة شوي: -0.22 -> -0.15 -->
+                <body name="wheel_left_body" pos="0 0.23 -0.15">
+                    <joint name="wheel_left_joint" type="hinge" axis="1 0 0"/>
+                    <geom type="cylinder" size="0.12 0.045" euler="0 -90 0"
+                          friction="1.2 0.01 0.001"/>
+                </body>
+
+                <body name="wheel_right_body" pos="0 -0.23 -0.15">
+                    <joint name="wheel_right_joint" type="hinge" axis="1 0 0"/>
+                    <geom type="cylinder" size="0.12 0.045" euler="0 -90 0"
+                          friction="1.2 0.01 0.001"/>
+                </body>
+
+                <!-- ======================================================= -->
+                <!--                     LEGS             -->
+                <!-- ======================================================= -->
+
+                <!-- FRONT LEFT -->
+                <body name="leg_fl" pos="0.22 0.15 0">
+                    <joint name="hip1_fl" type="hinge" axis="0 1 0" range="-35 35"/>
+                    <geom type="capsule" fromto="0 0 0 0 0 -0.14" size="0.03"/>
+
+                    <body pos="0 0 -0.14">
+                        <joint name="hip2_fl" type="hinge" axis="1 0 0" range="-50 50"/>
+                        <geom type="capsule" fromto="0 0 0 0 0 -0.13" size="0.03"/>
+
+                        <body pos="0 0 -0.13">
+                            <joint name="knee_fl" type="hinge" axis="1 0 0" range="-110 15"/>
+                            <geom type="capsule" fromto="0 0 0 0 0 -0.11" size="0.027"/>
+
+                            <body pos="0 0 -0.11">
+                                <joint name="ankle_fl" type="hinge" axis="1 0 0" range="-40 40"/>
+                                <geom type="sphere" size="0.035"/>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+
+                <!-- FRONT RIGHT -->
+                <body name="leg_fr" pos="0.22 -0.15 0">
+                    <joint name="hip1_fr" type="hinge" axis="0 1 0" range="-35 35"/>
+                    <geom type="capsule" fromto="0 0 0 0 0 -0.14" size="0.03"/>
+
+                    <body pos="0 0 -0.14">
+                        <joint name="hip2_fr" type="hinge" axis="1 0 0" range="-50 50"/>
+                        <geom type="capsule" fromto="0 0 0 0 0 -0.13" size="0.03"/>
+
+                        <body pos="0 0 -0.13">
+                            <joint name="knee_fr" type="hinge" axis="1 0 0" range="-110 15"/>
+                            <geom type="capsule" fromto="0 0 0 0 0 -0.11" size="0.027"/>
+
+                            <body pos="0 0 -0.11">
+                                <joint name="ankle_fr" type="hinge" axis="1 0 0" range="-40 40"/>
+                                <geom type="sphere" size="0.035"/>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+
+                <!-- BACK LEFT -->
+                <body name="leg_bl" pos="-0.22 0.15 0">
+                    <joint name="hip1_bl" type="hinge" axis="0 1 0" range="-35 35"/>
+                    <geom type="capsule" fromto="0 0 0 0 0 -0.14" size="0.03"/>
+
+                    <body pos="0 0 -0.14">
+                        <joint name="hip2_bl" type="hinge" axis="1 0 0" range="-50 50"/>
+                        <geom type="capsule" fromto="0 0 0 0 0 -0.13" size="0.03"/>
+
+                        <body pos="0 0 -0.13">
+                            <joint name="knee_bl" type="hinge" axis="1 0 0" range="-110 15"/>
+                            <geom type="capsule" fromto="0 0 0 0 0 -0.11" size="0.027"/>
+
+                            <body pos="0 0 -0.11">
+                                <joint name="ankle_bl" type="hinge" axis="1 0 0" range="-40 40"/>
+                                <geom type="sphere" size="0.035"/>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+
+                <!-- BACK RIGHT -->
+                <body name="leg_br" pos="-0.22 -0.15 0">
+                    <joint name="hip1_br" type="hinge" axis="0 1 0" range="-35 35"/>
+                    <geom type="capsule" fromto="0 0 0 0 0 -0.14" size="0.03"/>
+
+                    <body pos="0 0 -0.14">
+                        <joint name="hip2_br" type="hinge" axis="1 0 0" range="-50 50"/>
+                        <geom type="capsule" fromto="0 0 0 0 0 -0.13" size="0.03"/>
+
+                        <body pos="0 0 -0.13">
+                            <joint name="knee_br" type="hinge" axis="1 0 0" range="-110 15"/>
+                            <geom type="capsule" fromto="0 0 0 0 0 -0.11" size="0.027"/>
+
+                            <body pos="0 0 -0.11">
+                                <joint name="ankle_br" type="hinge" axis="1 0 0" range="-40 40"/>
+                                <geom type="sphere" size="0.035"/>
+                            </body>
+                        </body>
+                    </body>
+                </body>
+
+            </body>
+        </body>
+    </worldbody>
+
+    <!-- ===================== ACTUATORS ===================== -->
+    <actuator>
+
+        <position name="lift" joint="elevate" kp="300"/>
+
+        <motor name="m_wheel_left" joint="wheel_left_joint" gear="1" ctrlrange="-700 700"/>
+        <motor name="m_wheel_right" joint="wheel_right_joint" gear="1" ctrlrange="-700 700"/>
+
+        <position name="m_hip1_fl" joint="hip1_fl" kp="180"/>
+        <position name="m_hip2_fl" joint="hip2_fl" kp="200"/>
+        <position name="m_knee_fl" joint="knee_fl" kp="260"/>
+        <position name="m_ankle_fl" joint="ankle_fl" kp="160"/>
+
+        <position name="m_hip1_fr" joint="hip1_fr" kp="180"/>
+        <position name="m_hip2_fr" joint="hip2_fr" kp="200"/>
+        <position name="m_knee_fr" joint="knee_fr" kp="260"/>
+        <position name="m_ankle_fr" joint="ankle_fr" kp="160"/>
+
+        <position name="m_hip1_bl" joint="hip1_bl" kp="180"/>
+        <position name="m_hip2_bl" joint="hip2_bl" kp="200"/>
+        <position name="m_knee_bl" joint="knee_bl" kp="260"/>
+        <position name="m_ankle_bl" joint="ankle_bl" kp="160"/>
+
+        <position name="m_hip1_br" joint="hip1_br" kp="180"/>
+        <position name="m_hip2_br" joint="hip2_br" kp="200"/>
+        <position name="m_knee_br" joint="knee_br" kp="260"/>
+        <position name="m_ankle_br" joint="ankle_br" kp="160"/>
+
+    </actuator>
+
+</mujoco>
