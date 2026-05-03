@@ -1,0 +1,3 @@
+1. To the model you have created in the previous task, you need to add actuators. For Optimus mechanism there is one actuator (q1), for tendon mechanism there are two actuators (q1 and q2).
+2. Modify the .xml file by adding ```<actuaor>``` and ```<sensor>``` containers (look at the examples in the previous task).
+3. Define control effort via PD regulator. The $q^{des} = AMP \cdot sin(FREQ \cdot t) + BIAS$. Look in the [table](https://docs.google.com/spreadsheets/d/1ArDc0uXQGEbSWpaOhKvYPi4TjOWBZ9PoTXz1Icymx1w/edit?usp=sharing) for sine wave parameters. If the conrol sequence goes beyond workspace of the mechanism, decrease the amplitude and tune bias only if needed.
