@@ -1,0 +1,20 @@
+<mujoco model="spatial_3R_dynamics">
+  <compiler angle="radian" inertiafromgeom="false"/>
+  <option timestep=".002" gravity="0 0 -9.81" integrator="implicitfast"/>
+  <default><joint type="hinge" limited="false" damping=".06"/><geom type="capsule" size=".025" contype="0" conaffinity="0"/><motor gear="1" ctrllimited="true" ctrlrange="-20 20"/></default>
+  <worldbody><light pos="1 -2 3"/><geom type="plane" size="2 2 .1" rgba=".95 .95 .95 1"/>
+    <body name="link1"><joint name="q1" axis="0 0 1"/>
+      <inertial pos="0 0 .2" mass="2" diaginertia=".02697916666666667 .02697916666666667 .000625"/>
+      <geom fromto="0 0 0 0 0 .4" rgba=".48 .15 .24 1"/>
+      <body name="link2" pos="0 0 .4"><joint name="q2" axis="1 0 0"/>
+        <inertial pos="0 .175 0" mass="1.5" diaginertia=".015546875 .00046875 .015546875"/>
+        <geom fromto="0 0 0 0 .35 0" rgba=".28 .47 .58 1"/>
+        <body name="link3" pos="0 .35 0"><joint name="q3" axis="1 0 0"/>
+          <inertial pos="0 .125 0" mass="1" diaginertia=".005364583333333333 .0003125 .005364583333333333"/>
+          <geom fromto="0 0 0 0 .25 0" rgba=".71 .36 .13 1"/><site name="tip" pos="0 .25 0" size=".025" rgba="0 0 0 1"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator><motor joint="q1"/><motor joint="q2"/><motor joint="q3"/></actuator>
+</mujoco>

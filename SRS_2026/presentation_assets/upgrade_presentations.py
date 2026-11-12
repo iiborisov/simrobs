@@ -32,7 +32,7 @@ FORMULAS={
 7:[r'y_{n+1}=y_n+hf(t_n,y_n)',r'y_{n+1}=y_n+hf(t_{n+1},y_{n+1})',r'y_{n+1}=y_n+\frac h6(k_1+2k_2+2k_3+k_4)'],
 9:[r'E_{n+1}=\left(1+h^2\frac{k}{m}\right)E_n',r'E_{n+1}=\frac{E_n}{1+h^2k/m}'],
 10:[r'\begin{aligned}F(z)&=z-y_n-hf(t_{n+1},z)=0,\\J_F(z)\Delta z&=-F(z),\\z&\leftarrow z+\Delta z.\end{aligned}'],
-11:[r'\dot y=\lambda y,\quad y_{n+1}=R(h\lambda)y_n,\quad |R(h\lambda)|<1'],
+11:[r'\begin{aligned}\dot y&=\lambda y,\\y_{n+1}&=R(h\lambda)y_n,\\|R(h\lambda)|&<1.\end{aligned}'],
 12:[r'\dot x=v,\qquad\dot v=\frac{u-bv-kx-mg}{m}'],
 },
 'lecture_2_2R_robot':{
@@ -49,7 +49,7 @@ FORMULAS={
 1:[r'P=e f'],
 4:[r'\dot q=f,\qquad e=\frac{\partial H}{\partial q}=\frac q C',r'\dot p=e,\qquad f=\frac{\partial H}{\partial p}=\frac p I'],
 6:[r'\begin{aligned}f_s=f_C=f_R=f_I&=v,\\e_s&=e_C+e_R+e_I.\end{aligned}'],
-7:[r'\dot x=\frac p m,\qquad\dot p=u-mg-kx-\frac b m p',r'H=\frac{p^2}{2m}+\frac{kx^2}{2},\qquad\dot H=(u-mg)v-bv^2'],
+7:[r'\dot x=\frac p m,\qquad\dot p=u-mg-kx-\frac b m p',r'\begin{aligned}H&=\frac{p^2}{2m}+\frac{kx^2}{2},\\\dot H&=(u-mg)v-bv^2.\end{aligned}'],
 8:[r'\begin{aligned}i&=\frac\phi L,\qquad U_C=\frac{q_e}{C},\\\dot q_e&=i,\\\dot\phi&=U-Ri-\frac{q_e}{C}.\end{aligned}'],
 9:[r'e_2=ne_1,\quad f_1=nf_2,\quad e_1f_1=e_2f_2'],
 10:[r'e_{\rm back}=K\omega,\quad\tau_{\rm em}=Ki,\quad e_{\rm back}i=\tau_{\rm em}\omega'],
@@ -181,6 +181,13 @@ def main():
             if lecture=='lecture_2_2R_robot' and i==5:
                 for el in section.xpath('.//p[contains(@class,"small")]'):
                     if '½' in el.text_content():configure_equation(el,r'T=\frac12\sum_i(m_iv_{ci}^2+I_i\omega_i^2)')
+            if lecture=='lecture_1_modelling_n_simulation' and i==6:
+                rows=section.xpath('.//table//tr[td="Колебательное затухание"]')
+                if rows:
+                    rows[0][0].text='0 < ζ < 1'
+                    table=rows[0].getparent()
+                    if not table.xpath('./tr[td="ζ = 0"]'):
+                        table.insert(0,html.fragment_fromstring('<tr><td>ζ = 0</td><td>Незатухающие колебания</td></tr>'))
             output.append(section)
             for item in expansions.get(i,[]):
                 new=html.fragment_fromstring('<section class="slide" data-extra="true"></section>')
