@@ -1,0 +1,27 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2R: три закона управления в MuJoCo · SRS 2026</title><link rel="stylesheet" href="../../web_assets/math-fonts.css"><link rel="stylesheet" href="../../web_assets/book.css"><script defer src="../../web_assets/book.js"></script></head><body><header><a class="brand" href="../../index.html">SRS 2026</a><nav aria-label="Навигация"><a href="../../index.html">Курс</a> <a href="README.en.html" lang="en">English</a> <button type="button" data-print>Печать / PDF</button></nav></header><main class="book"><aside class="sidebar"><details open><summary>Оглавление</summary><div class="toc">
+<ul></ul>
+</div>
+</details></aside><article><h1 id="2r-три-закона-управления-в-mujoco">2R: три закона управления в MuJoCo</h1>
+<p>Вертикальный 2R, гравитация включена. Примеры независимы от соседних лекций. Python 3.10+, зависимости из requirements.txt; проверено на Python 3.13 / MuJoCo 3.10.0.</p>
+<p>Из корня репозитория:</p>
+<pre><code class="language-bash">python -m pip install -r SRS_2026/lecture_4_control/control_2r/requirements.txt
+# Восьмёрка: три регулятора, без внешней силы
+python SRS_2026/lecture_4_control/control_2r/simulate.py --out /tmp/2r-tracking
+# Удержание положения с одинаковым внешним толчком
+python SRS_2026/lecture_4_control/control_2r/simulate.py --task interaction --force --out /tmp/2r-interaction
+# Интерактивное окно MuJoCo
+python SRS_2026/lecture_4_control/control_2r/simulate.py --method admittance --task interaction --force --viewer
+# Настройка податливости
+python SRS_2026/lecture_4_control/control_2r/simulate.py --method impedance --task interaction --force --stiffness 60 --damping 15 --out /tmp/2r-soft
+# Проверка уравнений и численного эксперимента
+python SRS_2026/lecture_4_control/control_2r/verify.py
+# Модульный запуск также поддерживается
+python -m SRS_2026.lecture_4_control.control_2r.simulate --method computed-torque
+</code></pre>
+<p>При необходимости вместо <code>python</code> используйте <code>/home/ib/miniconda3/envs/idt/bin/python</code>. Прямой запуск по абсолютному пути работает из любой папки; XML ищется относительно скрипта. Для headless-экспериментов дисплей и OpenGL не нужны; viewer требует графической сессии. На macOS для viewer используйте <code>mjpython</code> из пакета MuJoCo.</p>
+<p>Результаты: по CSV на метод, <code>metrics.json</code> с настройками и метриками, <code>comparison.png</code> с траекториями, отклонением x, моментом и силой. <code>--duration</code> — длительность, <code>--step</code> — шаг MuJoCo и частота обновления регулятора; по умолчанию 10 с и 2 мс. <code>--method</code> выбирает <code>computed-torque</code>, <code>impedance</code>, <code>admittance</code> или <code>all</code>. Для viewer выбирайте один метод.</p>
+<p><code>controllers.py</code> содержит законы, аналитические производные задания и RK4 внешнего admittance-фильтра. <code>robot_math.py</code> содержит физическую модель, совпадающую с <code>robot.xml</code> и моделью лекции 2. Impedance — декартовы пружина/демпфер с компенсацией тяжести, без задания искусственной инерции. Admittance — внешний фильтр силы плюс внутренний computed torque. Без силы admittance совпадает с computed torque.</p>
+<p>Сила среды действует <strong>на робот</strong> по +x, гладкий импульс 4 Н между 3–5 с. Мы прикладываем её через <code>mj_applyFT</code> и передаём как идеальное измерение в admittance. Это воспроизводимый силовой опыт; контактов со стенкой и физического датчика в XML нет. Красная сфера показывает команду p_c, а не обязательно номинальное p_d. При перетаскивании робота мышью дополнительное воздействие viewer не входит в идеальное измерение внешнего фильтра; для сравнимого опыта используйте <code>--force</code>.</p>
+<p>Kx/Ka: Н/м; Dx/Da: Н·с/м; Ma: кг. <code>--virtual-mass</code> влияет только на admittance. <code>--stiffness</code>, <code>--damping</code> настраивают impedance и admittance; computed torque использует фиксированные 1225 с⁻² и 70 с⁻¹. При экстремальных параметрах цель может стать недостижимой: IK выдаст явную ошибку. CLI проверяет положительность параметров, но не гарантирует устойчивость любой их комбинации.</p>
+<p>RMS относительно номинального p_d не является универсальной оценкой качества податливости. Смотрите также слежение за p_c, насыщение и возврат после снятия силы. <a href="../lecture_notes.html">Подробный вывод и задания</a>.</p>
+<p>Проверенные графики для настроек по умолчанию: <a href="reference_results/tracking.png">слeжение по восьмёрке</a> и <a href="reference_results/interaction.png">силовой опыт</a>. Они получены MuJoCo 3.10.0; для обновления выполните команды выше. Метрики и кривые презентации встроены в её HTML-файл.</p></article></main><footer>ITMO · Моделирование мехатронных и робототехнических систем</footer></body></html>

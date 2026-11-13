@@ -1,17 +1,14 @@
 name: simrobs
 channels:
   - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
-  - python=3.10.12
+  - python=3.13
   - pip
-  - ipykernel
-  - conda-forge::pinocchio 
-  - mujoco
+  - numpy>=2.0,<3
+  - matplotlib>=3.9,<4
+  - jupyterlab>=4,<5
+  - ipykernel>=6,<8
   - pip:
-    - numpy==1.26.4
-    - matplotlib
-    - jupyterlab
-    - meshcat
-    - yourdfpy
-    - mujoco-python-viewer
+      # Official Python bindings include mujoco.viewer used in the 2026 lectures.
+      - mujoco>=3.3,<4

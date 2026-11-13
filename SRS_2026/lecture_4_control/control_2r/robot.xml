@@ -1,0 +1,31 @@
+<mujoco model="vertical_2R">
+  <compiler angle="radian" inertiafromgeom="false"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="implicitfast"/>
+  <visual><global offwidth="1000" offheight="750"/></visual>
+  <default>
+    <joint type="hinge" axis="0 -1 0" damping="0.05" limited="false"/>
+    <geom contype="0" conaffinity="0"/>
+    <motor gear="1" ctrllimited="true" ctrlrange="-35 35"/>
+  </default>
+  <worldbody>
+    <light pos="0 -2 3" dir="0 1 -1"/>
+    <geom name="ground" type="plane" size="2 2 0.1" rgba="0.9 0.9 0.9 1"/>
+    <geom name="stand" type="cylinder" size="0.07 0.15" pos="0 0 0.15" rgba="0.3 0.3 0.3 1"/>
+    <site name="target" type="sphere" size="0.018" pos="0.4 0 0.5" rgba="1 0.2 0.2 0.7"/>
+    <body name="link1" pos="0 0 0.3">
+      <joint name="shoulder"/>
+      <inertial pos="0.2 0 0" mass="2" diaginertia="0.0001 0.02666666666666667 0.02666666666666667"/>
+      <geom name="link1_visual" type="capsule" fromto="0 0 0 0.4 0 0" size="0.025" rgba="0.15 0.45 0.85 1"/>
+      <body name="link2" pos="0.4 0 0">
+        <joint name="elbow"/>
+        <inertial pos="0.2 0 0" mass="2" diaginertia="0.0001 0.02666666666666667 0.02666666666666667"/>
+        <geom name="link2_visual" type="capsule" fromto="0 0 0 0.4 0 0" size="0.022" rgba="0.2 0.7 0.4 1"/>
+        <site name="tip" type="sphere" pos="0.4 0 0" size="0.018" rgba="0.1 0.1 0.1 1"/>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <motor name="shoulder_motor" joint="shoulder"/>
+    <motor name="elbow_motor" joint="elbow"/>
+  </actuator>
+</mujoco>

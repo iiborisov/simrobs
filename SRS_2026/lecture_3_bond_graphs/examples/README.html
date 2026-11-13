@@ -1,0 +1,94 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bond graphs: механика, RLC и электромеханический привод · SRS 2026</title><link rel="stylesheet" href="../../web_assets/math-fonts.css"><link rel="stylesheet" href="../../web_assets/book.css"><script defer src="../../web_assets/book.js"></script></head><body><header><a class="brand" href="../../index.html">SRS 2026</a><nav aria-label="Навигация"><a href="../../index.html">Курс</a> <a href="README.en.html" lang="en">English</a> <button type="button" data-print>Печать / PDF</button></nav></header><main class="book"><aside class="sidebar"><details open><summary>Оглавление</summary><div class="toc">
+<ul>
+<li><a href="#запуск">Запуск</a></li>
+<li><a href="#модели-и-состояния">Модели и состояния</a></li>
+<li><a href="#что-читать-в-коде">Что читать в коде</a></li>
+<li><a href="#результаты-и-проверки">Результаты и проверки</a></li>
+</ul>
+</div>
+</details></aside><article><h1 id="bond-graphs-механика-rlc-и-электромеханический-привод">Bond graphs: механика, RLC и электромеханический привод</h1>
+<p>Три примера к <a href="../lecture_notes.html">конспекту</a> и <a href="../presentation/index.html">интерактивной презентации</a>. Графы и уравнения выведены в лекции; Python вручную реализует эти конкретные модели, а не компилирует произвольные bond graphs.</p>
+<h2 id="запуск">Запуск</h2>
+<p>Из корня репозитория, Python 3.10+:</p>
+<pre><code class="language-bash">python -m pip install -r SRS_2026/lecture_3_bond_graphs/examples/requirements.txt
+
+# Все модели: CSV + графики.
+python SRS_2026/lecture_3_bond_graphs/examples/simulate.py --plot
+
+# По одной модели, без графиков требуется только NumPy.
+python SRS_2026/lecture_3_bond_graphs/examples/simulate.py --model msd
+python SRS_2026/lecture_3_bond_graphs/examples/simulate.py --model rlc --plot
+python SRS_2026/lecture_3_bond_graphs/examples/simulate.py --model motor --gear 3 --plot
+
+# Физические проверки.
+python SRS_2026/lecture_3_bond_graphs/examples/verify.py
+</code></pre>
+<p>Прямой запуск по абсолютному пути работает из любого каталога, включая Run в IDE. Поддерживается и <code>python -m SRS_2026.lecture_3_bond_graphs.examples.simulate</code>. Окно и OpenGL не нужны; используется Matplotlib Agg. Параметры: <code>--model</code>, <code>--step</code>, <code>--duration</code>, <code>--gear</code>, <code>--plot</code>, <code>--output</code>. Численный шаг по умолчанию 0.001 с; метод RK4.</p>
+<h2 id="модели-и-состояния">Модели и состояния</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Модель</th>
+<th>Состояния</th>
+<th>Структура</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>msd</code></td>
+<td>Деформация x и импульс p</td>
+<td>Se:u−mg, 1-узел, C:1/k, R:b, I:m</td>
+</tr>
+<tr>
+<td><code>rlc</code></td>
+<td>Заряд и потокосцепление</td>
+<td>Se:U, 1-узел с общим током, C:C, R:R, I:L</td>
+</tr>
+<tr>
+<td><code>motor</code></td>
+<td>Потокосцепление, приведённый момент импульса, угол нагрузки</td>
+<td>Электрическая цепь, GY:K, TF:n, инерции, демпферы и торсионная пружина</td>
+</tr>
+</tbody>
+</table>
+</div><p>Для <code>msd</code> ось x направлена вверх; гравитация включена как внешний Se. Поэтому энергия накопителей <code>H_J</code> не включает <code>mg*x</code>. Полная механическая энергия отдельно записана в колонку <code>mechanical_energy_J</code>. В графе пружина и демпфер принимают усилия <code>kx</code> и <code>bv</code>; в уравнении массы они вычитаются.</p>
+<p>Для двигателя <code>n=omega_motor/omega_load</code>. Приведённые к двигателю инерция и демпфирование равны <code>Jm+Jl/n**2</code> и <code>bm+bl/n**2</code>. При жёстком редукторе скорости двигателя и нагрузки зависимы; две инерции нельзя считать двумя независимыми скоростными состояниями.</p>
+<h2 id="что-читать-в-коде">Что читать в коде</h2>
+<p><a href="models.py">models.py</a> содержит классы моделей. В каждом:</p>
+<ul>
+<li><code>initial</code> задаёт начальное состояние;</li>
+<li><code>rhs</code> реализует уравнения из правил bonds и узлов;</li>
+<li><code>ports</code> возвращает переменные порта и мощности;</li>
+<li><code>energy</code> задаёт энергию накопителей;</li>
+<li><code>gradient</code> используется для независимой проверки дифференциального баланса энергии.</li>
+</ul>
+<p><code>simulate</code> добавляет интегралы работы источника и потерь к физическим состояниям и решает расширенную систему тем же RK4. <a href="simulate.py">simulate.py</a> отвечает за CLI, CSV и рисунки. <a href="verify.py">verify.py</a> проверяет модели и численную сходимость.</p>
+<h2 id="результаты-и-проверки">Результаты и проверки</h2>
+<p>Файлы по умолчанию сохраняются в <code>results/</code> рядом со скриптами: <code>msd.csv/png</code>, <code>rlc.csv/png</code>, <code>motor.csv/png</code>. Повторный запуск перезаписывает одноимённые файлы. Параметр <code>--output</code> позволяет указать другой каталог.</p>
+<p>CSV содержит состояния, наблюдаемые физические величины, мощности, H, работу источника, рассеянную энергию и невязку <code>H-H0-work+dissipation</code>. На графике первые две физические величины разделены по осям с указанными единицами.</p>
+<p>Проверенный запуск, h=0.001 с:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Модель</th>
+<th style="text-align: right;">Максимальная абсолютная невязка, Дж</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>msd, 10 с</td>
+<td style="text-align: right;">7.996×10⁻¹¹</td>
+</tr>
+<tr>
+<td>rlc, 4 с</td>
+<td style="text-align: right;">5.957×10⁻¹¹</td>
+</tr>
+<tr>
+<td>motor, 12 с</td>
+<td style="text-align: right;">2.202×10⁻¹⁰</td>
+</tr>
+</tbody>
+</table>
+</div><p>Помимо малого интегрального остатка, проверяется <code>gradient(H) @ rhs = power_in - power_loss</code>, неотрицательность потерь, равенство мощностей GY и TF, статические равновесия и сходимость RK4 при уменьшении шага. Энергия не заменяет проверку геометрии, топологии и каждого физического закона.</p>
+<p><img alt="Двигатель: переменные, мощности и баланс" src="../images/motor_results.png"></p>
+<p>Практическое задание: измените <code>K*omega</code> в электрическом уравнении двигателя, оставив механический момент <code>K*i</code>. Проверьте, почему возникает нарушение локального и интегрального балансов. Неправильную физическую связь нельзя исправить уменьшением численного шага.</p></article></main><footer>ITMO · Моделирование мехатронных и робототехнических систем</footer></body></html>
