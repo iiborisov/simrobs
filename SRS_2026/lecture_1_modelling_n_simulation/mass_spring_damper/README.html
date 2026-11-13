@@ -1,0 +1,92 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Масса–пружина–демпфер: сравнение интеграторов · SRS 2026</title><link rel="stylesheet" href="../../web_assets/math-fonts.css"><link rel="stylesheet" href="../../web_assets/book.css"><script defer src="../../web_assets/book.js"></script></head><body><header><a class="brand" href="../../index.html">SRS 2026</a><nav aria-label="Навигация"><a href="../../index.html">Курс</a> <a href="README.en.html" lang="en">English</a> <button type="button" data-print>Печать / PDF</button></nav></header><main class="book"><aside class="sidebar"><details open><summary>Оглавление</summary><div class="toc">
+<ul>
+<li><a href="#запуск">Запуск</a></li>
+<li><a href="#какие-файлы-читать">Какие файлы читать</a></li>
+<li><a href="#эксперименты">Эксперименты</a></li>
+</ul>
+</div>
+</details></aside><article><h1 id="массапружинадемпфер-сравнение-интеграторов">Масса–пружина–демпфер: сравнение интеграторов</h1>
+<p>Учебные скрипты к <a href="../lecture_notes.html#10-%D0%BF%D1%80%D0%B0%D0%BA%D1%82%D0%B8%D0%BA%D1%83%D0%BC-%D1%82%D1%80%D0%B8-python-%D0%BC%D0%B5%D1%82%D0%BE%D0%B4%D0%B0-%D0%BD%D0%B0-%D0%BE%D0%B4%D0%BD%D0%BE%D0%B9-%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B5">конспекту лекции, разделы 9–10</a>. Исходный пример: <a href="../../../SRS/lecture_1/modeling_n_simulation.ipynb">modeling_n_simulation.ipynb</a>.</p>
+<p>Модель: <code>m*x'' + b*x' + k*x = force - m*g</code>. Координата направлена вверх; ноль соответствует недеформированной пружине. Состояние — положение и скорость. Вход <code>force</code> постоянен. <strong>Во всех трёх сценариях включена гравитация: <code>g=9.8</code> м/с².</strong> В сценариях <code>undamped</code> и <code>stiff</code> начальное положение на 1 м выше гравитационного равновесия <code>x_eq=-m*g/k</code>; энергия рассчитывается относительно него. <strong>Во всех трёх сценариях включена гравитация: <code>g=9.8</code> м/с².</strong> В сценариях <code>undamped</code> и <code>stiff</code> начальное положение на 1 м выше гравитационного равновесия <code>x_eq=-m*g/k</code>; энергия рассчитывается относительно него.</p>
+<h2 id="запуск">Запуск</h2>
+<p>Python 3.9 или новее. Поддерживаются прямой запуск файлов (в том числе Run в IDE) и запуск через <code>-m</code> из корня репозитория. Например:</p>
+<pre><code class="language-bash">python3 SRS_2026/lecture_1_modelling_n_simulation/mass_spring_damper/experiments.py
+</code></pre>
+<p>Запуск модулей из корня репозитория:</p>
+<pre><code class="language-bash"># Каждый метод отдельно; таблицы и CSV не требуют установки пакетов.
+python3 -m SRS_2026.lecture_1_modelling_n_simulation.mass_spring_damper.forward_euler
+python3 -m SRS_2026.lecture_1_modelling_n_simulation.mass_spring_damper.backward_euler
+python3 -m SRS_2026.lecture_1_modelling_n_simulation.mass_spring_damper.rk4
+
+# Общее сравнение на всех сценариях.
+python3 -m SRS_2026.lecture_1_modelling_n_simulation.mass_spring_damper.experiments --scenario all
+</code></pre>
+<p>Для графиков установите matplotlib в своём окружении:</p>
+<pre><code class="language-bash">python3 -m pip install -r SRS_2026/lecture_1_modelling_n_simulation/mass_spring_damper/requirements.txt
+python3 -m SRS_2026.lecture_1_modelling_n_simulation.mass_spring_damper.experiments --scenario all --plot
+</code></pre>
+<p>Можно создать отдельное окружение через <code>python3 -m venv .venv</code> и активировать его перед установкой. Параметры команд доступны через <code>--help</code>.</p>
+<pre><code class="language-bash"># Сходимость на мелкой сетке.
+python3 -m SRS_2026.lecture_1_modelling_n_simulation.mass_spring_damper.experiments --scenario notebook --steps 0.01 0.005 0.0025 --duration 2 --plot
+
+# Разрешение быстрого процесса в жёсткой задаче.
+python3 -m SRS_2026.lecture_1_modelling_n_simulation.mass_spring_damper.experiments --scenario stiff --steps 0.001 0.0005 --plot
+</code></pre>
+<h2 id="какие-файлы-читать">Какие файлы читать</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Назначение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="model.py">model.py</a></td>
+<td>Физическая модель, реализации трёх методов, точное решение, энергия и цикл интегрирования</td>
+</tr>
+<tr>
+<td><a href="forward_euler.py">forward_euler.py</a></td>
+<td>Отдельный запуск прямого Эйлера</td>
+</tr>
+<tr>
+<td><a href="backward_euler.py">backward_euler.py</a></td>
+<td>Отдельный запуск обратного Эйлера</td>
+</tr>
+<tr>
+<td><a href="rk4.py">rk4.py</a></td>
+<td>Отдельный запуск RK4</td>
+</tr>
+<tr>
+<td><a href="experiments.py">experiments.py</a></td>
+<td>Сценарии, сравнение, сохранение CSV и PNG</td>
+</tr>
+</tbody>
+</table>
+</div><p>Начните с <code>rhs</code>, затем прочитайте три короткие функции интеграторов и <code>simulate</code>. Часть, отвечающая за графики и файлы, отделена от алгоритмов. Чтобы изменить массу, жёсткость, демпфирование и начальное состояние, измените соответствующую запись в <code>SCENARIOS</code> в <code>experiments.py</code>.</p>
+<h2 id="эксперименты">Эксперименты</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Сценарий</th>
+<th>Что показывает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>notebook</code></td>
+<td>Исходная вертикальная система; при крупных шагах явный Эйлер разгоняет физически затухающую систему</td>
+</tr>
+<tr>
+<td><code>undamped</code></td>
+<td>Точная энергия относительно равновесия постоянна; прямой Эйлер добавляет энергию, обратный — отнимает; RK4 намного точнее на выбранной сетке</td>
+</tr>
+<tr>
+<td><code>stiff</code></td>
+<td>При крупных шагах даже RK4 неустойчив; обратный Эйлер устойчив, но начальная быстрая динамика требует мелкой сетки для точности</td>
+</tr>
+</tbody>
+</table>
+</div><p>Результаты находятся в <code>results/</code> рядом со скриптами или в каталоге <code>--output</code>. Повторный запуск перезаписывает файлы с теми же именами. PNG содержит три панели: положение, скорость, энергия. Шкала <code>symlog</code> помогает увидеть и обычные колебания, и численное расхождение. Это не линейная шкала амплитуд.</p>
+<p>Каждый CSV содержит время, численные положение и скорость, их точные значения и две энергии. Сводные файлы <code>summary_*.csv</code> содержат максимальные ошибки на узлах расчётной сетки и отношение конечной энергии к начальной. Ошибки имеют физические единицы; положение и скорость не складываются в одну размерную норму. При нулевой начальной энергии её отношение обозначается <code>nan</code>.</p>
+<p>Уменьшение шага внутри области неустойчивости не обязано улучшать результат. Обратный Эйлер решается по точной линейной формуле: сходимость итераций здесь не ограничивает шаг. RK4 делает четыре вычисления правой части за шаг, прямой Эйлер — одно; для обратного используется отдельная алгебраическая формула. Число шагов и порядок точности сами по себе не определяют время вычисления.</p></article></main><footer>ITMO · Моделирование мехатронных и робототехнических систем</footer></body></html>

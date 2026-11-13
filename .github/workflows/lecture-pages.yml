@@ -1,0 +1,53 @@
+name: Publish SRS lecture materials
+
+on:
+  push:
+    branches: [main, srs/new_lectures]
+    paths:
+      - 'SRS_2026/**'
+      - 'SRS/lecture_1/modeling_n_simulation.ipynb'
+      - 'SRS/lecture_*/lecture_*.pdf'
+      - '.github/workflows/lecture-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: lecture-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Prepare static materials
+        shell: bash
+        run: |
+          mkdir -p _site/SRS_2026
+          cp -R SRS_2026/. _site/SRS_2026/
+          cp --parents SRS/lecture_1/modeling_n_simulation.ipynb _site/
+          for number in 2 3 4 5 6 7; do
+            cp --parents "SRS/lecture_${number}/lecture_${number}.pdf" _site/
+          done
+          cat > _site/index.html <<'HTML'
+          <!doctype html>
+          <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=SRS_2026/"><title>SRS 2026</title></head><body><a href="SRS_2026/">Лекции / Lecture materials</a></body></html>
+          HTML
+          touch _site/.nojekyll
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

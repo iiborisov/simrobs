@@ -1,0 +1,33 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Пространственная динамика: Python и MuJoCo · SRS 2026</title><link rel="stylesheet" href="../../web_assets/math-fonts.css"><link rel="stylesheet" href="../../web_assets/book.css"><script defer src="../../web_assets/book.js"></script></head><body><header><a class="brand" href="../../index.html">SRS 2026</a><nav aria-label="Навигация"><a href="../../index.html">Курс</a> <a href="README.en.html" lang="en">English</a> <button type="button" data-print>Печать / PDF</button></nav></header><main class="book"><aside class="sidebar"><details open><summary>Оглавление</summary><div class="toc">
+<ul></ul>
+</div>
+</details></aside><article><h1 id="пространственная-динамика-python-и-mujoco">Пространственная динамика: Python и MuJoCo</h1>
+<p>Тот же 3R, что в лекции 5: home-оси z,x,x, длины 0,4/0,35/0,25 м. Теперь добавлены массы 2/1,5/1 кг, цилиндрические инерции и реальная интеграция динамики. Нотация конспекта: H — конфигурация, T=(w;v) — твист, W — строка сил, I — пространственная инерция, τₐ — строка моментов. В коде <code>tau</code> представляет столбец τₐᵀ.</p>
+<p>Из корня репозитория:</p>
+<pre><code class="language-bash">python -m pip install -r SRS_2026/lecture_6_spatial_dynamics/spatial_dynamics/requirements.txt
+# Один численный пример, включая M/C/N и Newton–Euler для тела
+python SRS_2026/lecture_6_spatial_dynamics/spatial_dynamics/inspect_model.py
+# Четыре режима на физическом роботе без внешнего толчка
+python SRS_2026/lecture_6_spatial_dynamics/spatial_dynamics/simulate.py --out /tmp/dynamics-default
+# Пространственная виртуальная пружина + сила среды на tip
+python SRS_2026/lecture_6_spatial_dynamics/spatial_dynamics/simulate.py --method impedance --force --out /tmp/dynamics-impedance
+# Ошибка модели: физический XML прежний, модель регулятора 80%
+python SRS_2026/lecture_6_spatial_dynamics/spatial_dynamics/simulate.py --method computed-torque --model-mass-scale .8 --out /tmp/dynamics-mismatch
+# Графическое окно MuJoCo
+python SRS_2026/lecture_6_spatial_dynamics/spatial_dynamics/simulate.py --method computed-torque --viewer
+# Свободное вращение, эффект промежуточной оси
+python SRS_2026/lecture_6_spatial_dynamics/spatial_dynamics/rigid_body.py --axis middle --out /tmp/dynamics-rigid
+# Также: --axis min и --axis max
+# Проверки всех основных уравнений и динамических прогонов
+python SRS_2026/lecture_6_spatial_dynamics/spatial_dynamics/verify.py
+# Модульный запуск
+python -m SRS_2026.lecture_6_spatial_dynamics.spatial_dynamics.verify
+</code></pre>
+<p>Проверено: Python 3.13, NumPy 2.4.2, MuJoCo 3.10.0. В имеющемся окружении можно использовать <code>/home/ib/miniconda3/envs/idt/bin/python</code>. Прямой запуск по абсолютному пути работает из любой рабочей папки. XML ищется относительно скрипта. Для headless-прогонов дисплей не нужен; viewer требует графической сессии. На macOS используйте <code>mjpython</code> для viewer.</p>
+<p><code>simulate.py</code>: режимы <code>free</code>, <code>gravity</code>, <code>computed-torque</code>, <code>impedance</code>, <code>all</code>. По умолчанию 8 с, шаг и период управления 2 мс; параметры <code>--duration</code>, <code>--step</code>, <code>--out</code>. Viewer требует один выбранный метод. Приводы ±20 Н·м, суставное трение 0,06 Н·м·с/рад, контакты отключены. Визуальная плоскость не препятствует прохождению звеньев. Контроллер вычисляет момент, а MuJoCo интегрирует q и q̇ через <code>mj_step</code>.</p>
+<p><code>--force</code> прикладывает к tip известную силу по +x: 3sin²(π(t−3)/2) Н на интервале 3–5 с, вне его 0. Сила направлена <strong>от среды на робот</strong>. Это воспроизводимый внешний толчок через <code>mj_applyFT</code>, без стенки, датчика и его шума. При перетаскивании мышью viewer может добавить другое возмущение; для повторяемого сравнения используйте программный толчок.</p>
+<p><code>--model-mass-scale</code> меняет все номинальные массы и соответствующие инерции модели контроллера. Физический XML и фактическая энергия не меняются. Это не добавление полезной нагрузки к физическому роботу. При экстремальных параметрах возможны насыщение или потеря устойчивости; в CSV записан признак насыщения.</p>
+<p><code>model.py</code> вычисляет M и её производные аналитически, C — по Кристоффелю, N=∇P. <code>mass_from_energy</code> независимо собирает M из CoM-якобианов и пространственных инерций. <code>verify.py</code> сравнивает обе M с MuJoCo; проверяет bias, inverse/forward dynamics, Ṁ−2C, градиенты гравитационного и виртуального потенциалов, перенос инерции и нулевую мощность gyro.</p>
+<p>Результаты: CSV по методу, <code>metrics.json</code>, <code>comparison.png</code>. CSV содержит q,q̇, фактическую/заданную позиции tip, ограниченные моменты, силу, механическую энергию K+P, виртуальный потенциал, мощность входа и суставные потери. У разных методов разные задачи: их RMS не следует трактовать как общий рейтинг. Для impedance ненулевое отклонение во время толчка ожидаемо.</p>
+<p><code>rigid_body.py</code> — отдельная аналитическая модель свободного вращения, не MuJoCo. RK4 для w и экспоненциальный midpoint для R; CSV включает w,R,K,L⁰. Проверяйте отдельно энергию, угловой импульс и ортогональность. J=(0,02;0,04;0,055) кг·м², основной компонент скорости 5 рад/с.</p>
+<p>Эталонные графики: <a href="reference_results/default.png">общие режимы</a>, <a href="reference_results/impedance.png">impedance и толчок</a>, <a href="reference_results/mismatch.png">неточная модель</a>, <a href="reference_results/rigid.png">промежуточная ось</a>. <a href="../lecture_notes.html">Полный вывод</a>.</p></article></main><footer>ITMO · Моделирование мехатронных и робототехнических систем</footer></body></html>

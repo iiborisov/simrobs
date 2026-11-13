@@ -1,0 +1,30 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Пространственная кинематика: Python и MuJoCo · SRS 2026</title><link rel="stylesheet" href="../../web_assets/math-fonts.css"><link rel="stylesheet" href="../../web_assets/book.css"><script defer src="../../web_assets/book.js"></script></head><body><header><a class="brand" href="../../index.html">SRS 2026</a><nav aria-label="Навигация"><a href="../../index.html">Курс</a> <a href="README.en.html" lang="en">English</a> <button type="button" data-print>Печать / PDF</button></nav></header><main class="book"><aside class="sidebar"><details open><summary>Оглавление</summary><div class="toc">
+<ul></ul>
+</div>
+</details></aside><article><h1 id="пространственная-кинематика-python-и-mujoco">Пространственная кинематика: Python и MuJoCo</h1>
+<p>Обозначения: Hᵢʲ переводит координаты из Ψᵢ в Ψⱼ, T=(w;v) — твист-столбец, W=(τ F) — wrench-строка. В коде <code>H_i_j</code> сохраняет порядок индексов. Функция <code>exp_se3</code> принимает интегрированный твист, например TΔt, а не скорость без множителя времени.</p>
+<p>Из корня репозитория:</p>
+<pre><code class="language-bash">python -m pip install -r SRS_2026/lecture_5_spatial_kinematics/spatial_kinematics/requirements.txt
+# Координаты, мощность, винтовая траектория, дрейф SO(3), якобианы
+python SRS_2026/lecture_5_spatial_kinematics/spatial_kinematics/examples.py --out /tmp/spatial-results
+# Независимая проверка аналитики по MuJoCo, без окна
+python SRS_2026/lecture_5_spatial_kinematics/spatial_kinematics/mujoco_kinematics.py --out /tmp/spatial-mujoco
+# Окно с кинематически заданным движением 3R
+python SRS_2026/lecture_5_spatial_kinematics/spatial_kinematics/mujoco_kinematics.py --viewer
+# Проверка определений и модели
+python SRS_2026/lecture_5_spatial_kinematics/spatial_kinematics/verify.py
+# Модульный запуск
+python -m SRS_2026.lecture_5_spatial_kinematics.spatial_kinematics.verify
+</code></pre>
+<p>Проверено на Python 3.13, NumPy 2.4.2 и MuJoCo 3.10.0. При необходимости используйте <code>/home/ib/miniconda3/envs/idt/bin/python</code>. Скрипты работают напрямую по абсолютному пути из любой папки. Для примеров без окна дисплей не нужен; viewer требует графической сессии. На macOS для viewer используйте <code>mjpython</code>.</p>
+<p>Файлы:</p>
+<ul>
+<li><code>geometry.py</code>: skew/hat/vee, SO(3)/SE(3) exp, inverse, Adjoint, преобразование строки сил; PoE, независимая локальная цепь, Js,Jb,Jp.</li>
+<li><code>examples.py</code>: печатает отчёт и сохраняет <code>report.json</code>, <code>screw.csv</code>, <code>rotation_drift.csv</code>, <code>geometry.png</code>.</li>
+<li><code>robot3r.xml</code>: пространственная геометрия с осями z,x,x в home-позе, длины 0,4/0,35/0,25 м.</li>
+<li><code>mujoco_kinematics.py</code>: задаёт q(t),q̇(t), вызывает <strong>mj_forward</strong>, сверяет pose и сохраняет <code>3r_kinematics.csv</code> (t, суставные координаты/скорости, позиция, скорость tip, пространственный твист).</li>
+<li><code>verify.py</code>: 50 случайных состояний, инвариантность мощности, PoE против локальной цепи, конечные разности Ḣ, Js/Jb/Jp, ориентация и позиция MuJoCo, <code>mj_jacSite</code>, чистый перенос и малый угол.</li>
+</ul>
+<p>В MuJoCo-примере нет динамического интегрирования и регулятора: q задаётся кинематически, <code>mj_step</code> не вызывается. Физическая реакция на гравитацию, приводы и контакты здесь не исследуются. Это позволяет независимо проверить пространственную кинематику до добавления динамики.</p>
+<p>Js имеет порядок строк (w;v). <code>mj_jacSite</code> возвращает угловую скорость и <strong>скорость точки site</strong>, поэтому для позиции сравниваем с Jp, а не нижними тремя строками Js. Эта разница проверяется численно.</p>
+<p><a href="reference_results/geometry.png">Эталонный график винтового движения и дрейфа</a> · <a href="../lecture_notes.html">Конспект и проверки формул</a>.</p></article></main><footer>ITMO · Моделирование мехатронных и робототехнических систем</footer></body></html>

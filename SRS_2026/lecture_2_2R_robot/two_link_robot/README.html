@@ -1,0 +1,99 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>2R-манипулятор: восьмёрка и PD в MuJoCo · SRS 2026</title><link rel="stylesheet" href="../../web_assets/math-fonts.css"><link rel="stylesheet" href="../../web_assets/book.css"><script defer src="../../web_assets/book.js"></script></head><body><header><a class="brand" href="../../index.html">SRS 2026</a><nav aria-label="Навигация"><a href="../../index.html">Курс</a> <a href="README.en.html" lang="en">English</a> <button type="button" data-print>Печать / PDF</button></nav></header><main class="book"><aside class="sidebar"><details open><summary>Оглавление</summary><div class="toc">
+<ul>
+<li><a href="#запуск">Запуск</a></li>
+<li><a href="#состав-примера">Состав примера</a></li>
+<li><a href="#изменение-эксперимента">Изменение эксперимента</a></li>
+<li><a href="#результаты">Результаты</a></li>
+</ul>
+</div>
+</details></aside><article><h1 id="2r-манипулятор-восьмёрка-и-pd-в-mujoco">2R-манипулятор: восьмёрка и PD в MuJoCo</h1>
+<p><a href="../lecture_notes.html">Конспект второй лекции</a> содержит вывод кинематики и динамики. Модель движется в вертикальной плоскости с гравитацией. Сравниваются обычный суставной PD и PD с компенсацией тяжести; моменты ограничены ±35 Н·м.</p>
+<h2 id="запуск">Запуск</h2>
+<p>В Python-окружении (Python 3.10+, проверено с MuJoCo 3.10.0):</p>
+<pre><code class="language-bash">python -m pip install -r SRS_2026/lecture_2_2R_robot/two_link_robot/requirements.txt
+
+# Сравнение без графического окна: CSV, PNG, ошибки в терминале.
+python SRS_2026/lecture_2_2R_robot/two_link_robot/simulate.py
+
+# Интерактивная симуляция с движущейся красной целью.
+python SRS_2026/lecture_2_2R_robot/two_link_robot/simulate.py --controller pd-gravity --viewer
+
+# Для сравнения: тот же робот без компенсации тяжести.
+python SRS_2026/lecture_2_2R_robot/two_link_robot/simulate.py --controller pd --viewer
+
+# Проверка формул и качества слежения без окна.
+python SRS_2026/lecture_2_2R_robot/two_link_robot/verify.py
+</code></pre>
+<p>Команды выше выполняются из корня репозитория. Прямой запуск по абсолютному пути работает из любого каталога, включая Run в IDE. Также поддерживается <code>python -m SRS_2026.lecture_2_2R_robot.two_link_robot.simulate</code> из корня. На macOS для пассивного viewer используйте <code>mjpython</code> вместо <code>python</code>.</p>
+<p><code>--viewer</code> требует графического сеанса и выбора одного регулятора. Для расчётов без viewer дисплей не нужен. Внешний пакет <code>mujoco_viewer</code> не используется. <code>--help</code> показывает все аргументы.</p>
+<h2 id="состав-примера">Состав примера</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Файл</th>
+<th>Что читать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="robot.xml">robot.xml</a></td>
+<td>Плоскость xz, оси суставов <code>0 -1 0</code>, два звена длиной 0.4 м и массой 2 кг, явные инерции</td>
+</tr>
+<tr>
+<td><a href="robot_math.py">robot_math.py</a></td>
+<td>Прямая/обратная кинематика, якобиан, M, c, G, прямая/обратная динамика и задание восьмёрки</td>
+</tr>
+<tr>
+<td><a href="simulate.py">simulate.py</a></td>
+<td>Получение q_ref и dq_ref, PD, компенсация G, насыщение, mj_step, логирование и графики</td>
+</tr>
+<tr>
+<td><a href="verify.py">verify.py</a></td>
+<td>Сопоставление аналитики с MuJoCo и проверка обеих ветвей IK и слежения</td>
+</tr>
+</tbody>
+</table>
+</div><p>Начните с <code>forward_kinematics</code>, <code>inverse_kinematics</code>, <code>jacobian</code>, затем прочитайте <code>reference</code> и цикл <code>run</code>. Вектор скорости цели в м/с преобразуется якобианом в суставные скорости в рад/с; в регулятор подаются величины в одинаковых координатах.</p>
+<p>Положение <code>(x,z)</code> в формулах отсчитывается от плеча. В мировых координатах MuJoCo плечо расположено на высоте 0.3 м. Восьмёрка: <code>x=0.4+0.12*sin(phase)</code>, <code>z=0.2+0.10*sin(2*phase)</code>. В первые 2 с скорость фазы плавно разгоняется от нуля. После разгона период составляет 6 с.</p>
+<p>Начальное состояние задаётся по IK только один раз. Затем робот движется под действием моментов; <code>qpos</code> на целевую траекторию не переставляется. Гравитация включена. Контакты и столкновения отключены. Красный <code>site</code> обозначает цель и не создаёт механических сил.</p>
+<p>PD+G добавляет только гравитационные моменты, а не весь <code>qfrc_bias</code> (он содержит также скоростные слагаемые). Компенсация инерционных моментов в этом контроллере не реализована.</p>
+<h2 id="изменение-эксперимента">Изменение эксперимента</h2>
+<pre><code class="language-bash"># Ускорить движение.
+python SRS_2026/lecture_2_2R_robot/two_link_robot/simulate.py --period 3
+
+# Изменить усиления (два числа для двух суставов).
+python SRS_2026/lecture_2_2R_robot/two_link_robot/simulate.py --kp 200 120 --kd 28 17
+
+# Сохранить в другой каталог.
+python SRS_2026/lecture_2_2R_robot/two_link_robot/simulate.py --duration 8 --output /tmp/2r-results
+</code></pre>
+<p>Изменяя длины, массы, инерции или высоту основания, согласуйте <code>robot.xml</code> и <code>Parameters</code> в <code>robot_math.py</code>. <code>verify.py</code> проверяет эталонную модель; после изменения параметров сравнение слежения может потребовать других допусков.</p>
+<h2 id="результаты">Результаты</h2>
+<p>По умолчанию файлы сохраняются в <code>results/</code> рядом со скриптом. Повторный запуск перезаписывает одноимённые результаты. PNG содержит четыре панели: геометрическая траектория, ошибка конца, ошибки суставов и моменты. CSV включает время, текущие/целевые углы и скорости, текущие/целевые координаты, моменты, позиционную ошибку и флаг насыщения. Все величины в СИ.</p>
+<p>Проверенный запуск, 14 с, шаг 0.002 с:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Регулятор</th>
+<th style="text-align: right;">RMS ошибки конца</th>
+<th style="text-align: right;">Максимум</th>
+<th style="text-align: right;">Насыщение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PD</td>
+<td style="text-align: right;">56.526 мм</td>
+<td style="text-align: right;">79.255 мм</td>
+<td style="text-align: right;">0%</td>
+</tr>
+<tr>
+<td>PD+G</td>
+<td style="text-align: right;">1.337 мм</td>
+<td style="text-align: right;">2.564 мм</td>
+<td style="text-align: right;">0%</td>
+</tr>
+</tbody>
+</table>
+</div><p><img alt="Сравнение слежения" src="../images/tracking_comparison.png"></p>
+<p>Показатели считаются по узлам до каждого шага, включая разгон. Они характеризуют этот эксперимент; при иной траектории, параметрах или усилениях будут другими. Графическое окно на результат не влияет, если не добавлять возмущения через viewer.</p></article></main><footer>ITMO · Моделирование мехатронных и робототехнических систем</footer></body></html>
