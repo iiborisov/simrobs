@@ -209,3 +209,5 @@ CSV содержит фактическое p, номинальное p_d, ко�
 - MuJoCo: [вычислительная модель и интеграторы](https://mujoco.readthedocs.io/en/stable/computation/), [API: mj_applyFT](https://mujoco.readthedocs.io/en/stable/APIreference/APIfunctions.html#mj-applyft), [Python и passive viewer](https://mujoco.readthedocs.io/en/stable/python.html#passive-viewer). `mj_applyFT` прибавляет эквивалентную обобщённую силу в переданный вектор; это не показание датчика.
 
 Сначала просмотрите вывод §11.4 и код `controllers.py`, затем сравните `comparison.png` и столбцы p_d,p_c,p в CSV. Формулы слайдов и конспекта используют одну систему знаков.
+
+[English](lecture_notes.en.md)

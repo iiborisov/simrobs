@@ -431,3 +431,5 @@ $$\mathrm{RMS}=\sqrt{\frac1N\sum_{n=0}^{N-1}\varepsilon_n^2},\qquad
 - [Computation: Numerical integration](https://mujoco.readthedocs.io/en/stable/computation/#numerical-integration) — реализованные интеграторы.
 
 Ссылки `stable` обновляются вместе с документацией. Код этой лекции проверен на MuJoCo 3.10.0; при работе с другой версией сверяйте её API и доступные настройки.
+
+[English](lecture_notes.en.md)

@@ -10,14 +10,5 @@
 
 [Поминутный план](TEACHING_PLAN.md) · [Конспект](../lecture_notes.md).
 
-Пересборка из корня репозитория:
-
-```bash
-python SRS_2026/lecture_6_spatial_dynamics/build_presentation.py
-# Повторить MuJoCo и свободное вращение, обновить записи:
-python SRS_2026/lecture_6_spatial_dynamics/build_presentation.py --record
-```
-
-Нужен `lxml` для общего модуля оформления, а для `--record` — зависимости примеров. Контент: `../build_presentation.py`; логика/стили: `deck.js`, `deck.css`; записи: `recordings.json`. Общие CMU/KaTeX находятся в `../../presentation_assets` вместе с лицензиями. После сборки готовый HTML не зависит от этих файлов.
 
 Печать браузером показывает все слайды. Раскройте ответы к обсуждениям перед печатью, если они нужны в экспортированном PDF.

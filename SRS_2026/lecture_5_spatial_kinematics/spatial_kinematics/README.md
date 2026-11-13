@@ -32,4 +32,4 @@ python -m SRS_2026.lecture_5_spatial_kinematics.spatial_kinematics.verify
 
 Js имеет порядок строк (w;v). `mj_jacSite` возвращает угловую скорость и **скорость точки site**, поэтому для позиции сравниваем с Jp, а не нижними тремя строками Js. Эта разница проверяется численно.
 
-[Эталонный график винтового движения и дрейфа](reference_results/geometry.png) · [Конспект и исправления опечаток источника](../lecture_notes.md).
+[Эталонный график винтового движения и дрейфа](reference_results/geometry.png) · [Конспект и проверки формул](../lecture_notes.md).
