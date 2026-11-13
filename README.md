@@ -2,7 +2,7 @@
 
 Lecture notes, interactive presentations, and Python examples for two subjects taught at ITMO University for Robotics and Artificial Intelligence students.
 
-**SRS 2026 / Моделирование робототехнических систем:** [course catalog](SRS_2026/index.html) · [materials and publication instructions](SRS_2026/README.md). All six lectures have Russian and English notes and slides.
+**SRS 2026 / Моделирование робототехнических систем:** [course catalog](SRS_2026/index.html) · [lecture materials](SRS_2026/README.md). All six lectures have Russian and English notes and slides.
 
 Instructor: Ivan Borisov, PhD, borisovii@itmo.ru
 
@@ -61,7 +61,6 @@ After completing the six lectures, students can:
 
 Original PDF lectures and earlier practical materials remain in [SRS](SRS/). Some older examples use Pinocchio, Meshcat, or URDF tools; these are not dependencies of the six `SRS_2026` lectures and are not included in the base environment.
 
-For online access, [GitHub Pages publication instructions](SRS_2026/README.md#публикация-через-github-pages) describe the supplied workflow. The expected address after a successful deployment is `https://iiborisov.github.io/simrobs/SRS_2026/`.
 
 ## **Materials**
 

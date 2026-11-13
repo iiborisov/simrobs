@@ -1,9 +1,5 @@
-<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Лекции / Lecture materials · SRS 2026</title><link rel="stylesheet" href="./web_assets/math-fonts.css"><link rel="stylesheet" href="./web_assets/book.css"><script defer src="./web_assets/book.js"></script></head><body><header><a class="brand" href="./index.html">SRS 2026</a><nav aria-label="Навигация"><a href="./index.html">Курс</a> <button type="button" data-print>Печать / PDF</button></nav></header><main class="book"><aside class="sidebar"><details open><summary>Оглавление</summary><div class="toc">
-<ul>
-<li><a href="#публикация-через-github-pages">Публикация через GitHub Pages</a></li>
-</ul>
-</div>
-</details></aside><article><h1 id="лекции-lecture-materials">Лекции / Lecture materials</h1>
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Лекции / Lecture materials · SRS 2026</title><link rel="stylesheet" href="./web_assets/math-fonts.css"><link rel="stylesheet" href="./web_assets/book.css"><script defer src="./web_assets/book.js"></script></head><body><header><a class="brand" href="./index.html">SRS 2026</a><nav aria-label="Навигация"><a href="./index.html">Курс</a> <button type="button" data-print>Печать / PDF</button></nav></header><main class="book"><article><h1 id="лекции-lecture-materials">Лекции / Lecture materials</h1>
 <p><a href="index.html">Открыть HTML-каталог курса</a>. Конспекты доступны для чтения в браузере, презентации — для интерактивных занятий.</p>
 <p>Русские и английские версии содержат одинаковые модели, формулы и интерактивные эксперименты. / Both language versions share the same models, equations and interactive experiments.</p>
 <div class="table-wrap"><table>
@@ -61,13 +57,4 @@
 </tr>
 </tbody>
 </table>
-</div><h2 id="публикация-через-github-pages">Публикация через GitHub Pages</h2>
-<p>Готовые HTML лежат рядом с Markdown-конспектами: <code>lecture_notes.html</code> и <code>lecture_notes.en.html</code>. Сборщик не требуется. Общий каталог — <code>index.html</code>; шрифты и стили конспектов — <code>web_assets/</code>.</p>
-<ol>
-<li>Отправьте изменения в ветку <code>srs/new_lectures</code> или <code>main</code> репозитория <code>iiborisov/simrobs</code>.</li>
-<li>В <strong>Settings → Pages → Build and deployment → Source</strong> выберите <strong>GitHub Actions</strong>.</li>
-<li>В <strong>Actions → Publish SRS lecture materials → Run workflow</strong> выберите ветку с HTML и запустите публикацию. Следующие изменения материалов в этих ветках запускают её автоматически.</li>
-</ol>
-<p>После успешного завершения workflow адрес каталога: <code>https://iiborisov.github.io/simrobs/SRS_2026/</code>. Фактический адрес публикации также отображается в результате задания Deploy Pages. До первого успешного развёртывания ссылка может быть недоступна.</p>
-<p>Workflow <a href="https://github.com/iiborisov/simrobs/blob/srs/new_lectures/.github/workflows/lecture-pages.yml">.github/workflows/lecture-pages.yml</a> публикует материалы курса и только те исходные PDF/ноутбук из <code>SRS</code>, на которые ссылаются лекции. При правках конспекта обновляйте также соответствующий HTML — автоматической конвертации Markdown в этом workflow нет.</p>
-<p><a href="https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages">Настройка публикации GitHub Pages через Actions</a>.</p></article></main><footer>ITMO · Моделирование мехатронных и робототехнических систем</footer></body></html>
+</div></article></main><footer>ITMO · Моделирование мехатронных и робототехнических систем</footer></body></html>
