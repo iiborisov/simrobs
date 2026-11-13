@@ -26,7 +26,7 @@ A physical point p differs from its coordinate column pⁱ. The same point can b
 | Wᵢᵏ=(τᵢᵏ Fᵢᵏ) | Wrench: moment and force, **1×6 row** |
 | ã | Skew-symmetric matrix satisfying ãb=a×b |
 
-Full indices are \(R_i^j,H_i^j,T_i^{k,j},W_i^k\). Code `H_i_j` reads in the same order, i to j. T means **twist**, not configuration. Physical power is \(\mathcal P\) to distinguish it from homogeneous point P.
+Full indices are $R_i^j,H_i^j,T_i^{k,j},W_i^k$. Code `H_i_j` reads in the same order, i to j. T means **twist**, not configuration. Physical power is $\mathcal P$ to distinguish it from homogeneous point P.
 
 Lectures 1–4 use T for kinetic energy. From spatial kinematics onward, T means twist; Lecture 6 uses K for kinetic energy. Configuration is H in Lectures 2,5,6, with 3×3 or 4×4 size for planar or spatial motion.
 
@@ -40,19 +40,19 @@ Columns are source-frame axes Ψᵢ expressed in destination Ψⱼ. Points in fr
 
 $$SO(3)=\{R\in\mathbb R^{3\times3}:R^TR=I,\ \det R=1\}.$$
 
-R preserves lengths and angles; det R=+1 excludes reflection. Identity is I, and inverse map is \(R_j^i=(R_i^j)^T\). Multiplication is associative but generally **not commutative**.
+R preserves lengths and angles; det R=+1 excludes reflection. Identity is I, and inverse map is $R_j^i=(R_i^j)^T$. Multiplication is associative but generally **not commutative**.
 
 Let Ψ₂ rotate +θ about z₁ relative to Ψ₁. Then
 
 $$R_2^1=\begin{bmatrix}\cos\theta&-\sin\theta&0\\\sin\theta&\cos\theta&0\\0&0&1\end{bmatrix},\quad R_1^2=(R_2^1)^T.$$
 
-The negative angle in \(R_1^2\) is the first-to-second coordinate change in the original planar example. A +θ matrix has **opposite index direction**, not contradictory physics. Active point rotation and passive coordinate change may use similar matrices; identify the operation and frames first.
+The negative angle in $R_1^2$ is the first-to-second coordinate change in the original planar example. A +θ matrix has **opposite index direction**, not contradictory physics. Active point rotation and passive coordinate change may use similar matrices; identify the operation and frames first.
 
 ### Chain rule
 
 $$p^k=R_j^k(R_i^j p^i),\qquad\boxed{R_i^k=R_j^kR_i^j.}$$
 
-The transform nearest the vector acts first. For example, \(R_x(\pi/2)R_z(\pi/2)e_x=e_z\), whereas \(R_z(\pi/2)R_x(\pi/2)e_x=e_y\).
+The transform nearest the vector acts first. For example, $R_x(\pi/2)R_z(\pi/2)e_x=e_z$, whereas $R_z(\pi/2)R_x(\pi/2)e_x=e_y$.
 
 ## 3. Skew matrices and angular velocity
 
@@ -62,7 +62,7 @@ For smooth R(t), differentiate RRᵀ=I:
 
 $$\dot R R^T+R\dot R^T=0\quad\Rightarrow\quad(\dot RR^T)^T=-\dot RR^T.$$
 
-Thus \(\dot RR^T\) is not a rotation matrix but an element of \(\mathfrak{so}(3)\), the skew-symmetric matrices. Geometrically it represents angular velocity.
+Thus $\dot RR^T$ is not a rotation matrix but an element of $\mathfrak{so}(3)$, the skew-symmetric matrices. Geometrically it represents angular velocity.
 
 $$\widetilde w_i^{j,j}=\dot R_i^jR_j^i,\qquad\widetilde w_i^{i,j}=R_j^i\dot R_i^j.$$
 
@@ -76,21 +76,21 @@ For a point fixed in Ψᵢ and coincident frame origins:
 
 $$\dot p^j=\dot R_i^jp^i=\widetilde w_i^{j,j}p^j=w_i^{j,j}\times p^j.$$
 
-If p moves relative to the body, add \(R_i^j\dot p^i\).
+If p moves relative to the body, add $R_i^j\dot p^i$.
 
 ## 4. Rotation exponential and Rodrigues' formula
 
-Constant spatial angular velocity gives ODE \(\dot R=\widetilde wR\) with solution
+Constant spatial angular velocity gives ODE $\dot R=\widetilde wR$ with solution
 
 $$R(t)=\exp(\widetilde wt)R(0).$$
 
-Constant body-expressed velocity gives the opposite order: \(R(t)=R(0)\exp(\widetilde w_b t)\). For varying velocity, an exponential of its integral is not generally valid because generators at different times may not commute.
+Constant body-expressed velocity gives the opposite order: $R(t)=R(0)\exp(\widetilde w_b t)$. For varying velocity, an exponential of its integral is not generally valid because generators at different times may not commute.
 
-Let \(\hat w\) be a unit axis and θ an angle. Then
+Let $\hat w$ be a unit axis and θ an angle. Then
 
 $$\boxed{R=\exp(\widetilde{\hat w}\theta)=I+\sin\theta\,\widetilde{\hat w}+(1-\cos\theta)\widetilde{\hat w}^{\,2}.}$$
 
-A unit axis differs from integrated rotation vector \(\phi=\hat w\theta\). For nonunit φ, the same formula is
+A unit axis differs from integrated rotation vector $\phi=\hat w\theta$. For nonunit φ, the same formula is
 
 $$R=I+\frac{\sin\theta}{\theta}\widetilde\phi+\frac{1-\cos\theta}{\theta^2}\widetilde\phi^2,\quad\theta=\|\phi\|.$$
 
@@ -98,7 +98,7 @@ As θ→0, coefficients approach 1 and 1/2. The code uses series to avoid divisi
 
 ### Numerical experiment
 
-Additive Euler step \(R_{n+1}=R_n+h\widetilde wR_n\) generally violates RᵀR=I. Structural step \(R_{n+1}=\exp(h\widetilde w)R_n\) preserves SO(3) to rounding accuracy. It is exact for constant w; with varying w held at the start of each step, it is generally first order. Geometry preservation and accuracy order are different properties.
+Additive Euler step $R_{n+1}=R_n+h\widetilde wR_n$ generally violates RᵀR=I. Structural step $R_{n+1}=\exp(h\widetilde w)R_n$ preserves SO(3) to rounding accuracy. It is exact for constant w; with varying w held at the start of each step, it is generally first order. Geometry preservation and accuracy order are different properties.
 
 ## 5. Body configuration: SE(3)
 
@@ -106,7 +106,7 @@ Frame origins may differ:
 
 $$p^j=R_i^jp^i+o_i^j.$$
 
-Introduce \(P^i=((p^i)^T,1)^T\):
+Introduce $P^i=((p^i)^T,1)^T$:
 
 $$\boxed{P^j=H_i^jP^i,\qquad H_i^j=\begin{bmatrix}R_i^j&o_i^j\\0&1\end{bmatrix}.}$$
 
@@ -124,7 +124,7 @@ $$\boxed{H_i^k=H_j^kH_i^j},\qquad o_i^k=R_j^ko_i^j+o_j^k.$$
 
 Express translations in one frame before adding them. Simply adding oᵢʲ+oⱼᵏ is generally incorrect.
 
-Numerical example: \(R_i^j=R_z(\pi/2)\), \(o_i^j=(0.3,-0.2,0.4)^T\), \(p^i=(0.2,0.1,0)^T\) gives \(p^j=(0.2,0,0.4)^T\). The script checks the inverse map.
+Numerical example: $R_i^j=R_z(\pi/2)$, $o_i^j=(0.3,-0.2,0.4)^T$, $p^i=(0.2,0.1,0)^T$ gives $p^j=(0.2,0,0.4)^T$. The script checks the inverse map.
 
 ## 6. Twist as configuration velocity
 
@@ -132,7 +132,7 @@ For H=Hᵢʲ(t), define
 
 $$\boxed{\widetilde T_i^{j,j}=\dot H_i^jH_j^i,\qquad\widetilde T_i^{i,j}=H_j^i\dot H_i^j.}$$
 
-These belong to algebra \(\mathfrak{se}(3)\):
+These belong to algebra $\mathfrak{se}(3)$:
 
 $$\widetilde T=\begin{bmatrix}\widetilde w&v\\0&0\end{bmatrix},\qquad T=\begin{bmatrix}w\\v\end{bmatrix}\in\mathbb R^6.$$
 
@@ -150,7 +150,7 @@ $$\boxed{\dot p^j=w_i^{j,j}\times p^j+v_i^{j,j}.}$$
 
 Extend this field throughout space: no actual material point need occupy Ψⱼ's origin. A twist therefore describes the whole body, not one selected point.
 
-At the body origin, \(\dot o=\widetilde wo+v\). Rotation with w=(0,0,ω) around z through r=(a,0,0) has \(v=r\times w=(0,-a\omega,0)\). Points on the axis are stationary, yet v is nonzero because it evaluates the field at another origin.
+At the body origin, $\dot o=\widetilde wo+v$. Rotation with w=(0,0,ω) around z through r=(a,0,0) has $v=r\times w=(0,-a\omega,0)$. Points on the axis are stationary, yet v is nonzero because it evaluates the field at another origin.
 
 ## 7. Adjoint: changing the twist expression frame
 
@@ -158,9 +158,9 @@ Keep motion of i relative to j fixed and change **only the expression frame** fr
 
 $$\widetilde T_i^{k,j}=H_j^k\widetilde T_i^{j,j}H_k^j.$$
 
-$$\boxed{T_i^{k,j}=\operatorname{Ad}_{H_j^k}T_i^{j,j},\qquad\operatorname{Ad}_{H}=\begin{bmatrix}R&0\\\widetilde oR&R\end{bmatrix}.}$$
+$$\boxed{T_i^{k,j}=\mathrm{Ad}_{H_j^k}T_i^{j,j},\qquad\mathrm{Ad}_{H}=\begin{bmatrix}R&0\\\widetilde oR&R\end{bmatrix}.}$$
 
-Order (w;v) determines block placement. Libraries using (v;w) have a different matrix. For one physical velocity, \(T_i^{j,j}=\operatorname{Ad}_{H_i^j}T_i^{i,j}\).
+Order (w;v) determines block placement. Libraries using (v;w) have a different matrix. For one physical velocity, $T_i^{j,j}=\mathrm{Ad}_{H_i^j}T_i^{i,j}$.
 
 This does not change the reference body: replacing the last index j with another moving body requires relative-motion accounting. Sum link twists only after expressing them in one frame:
 
@@ -174,13 +174,13 @@ $$W_i^k=\begin{bmatrix}\tau_i^k&F_i^k\end{bmatrix},\qquad\mathcal P=W_i^kT_i^{k,
 
 τ is moment about Ψₖ's origin, not merely motor torque. Angular velocity is in rad/s, linear velocity in m/s, torque in N·m, force in N. Power in W is frame-invariant.
 
-If \(T^{k}=\operatorname{Ad}_{H_j^k}T^{j}\), equality \(W^kT^k=W^jT^j\) gives
+If $T^{k}=\mathrm{Ad}_{H_j^k}T^{j}$, equality $W^kT^k=W^jT^j$ gives
 
-$$\boxed{W_i^k=W_i^j\operatorname{Ad}_{H_k^j}.}$$
+$$\boxed{W_i^k=W_i^j\mathrm{Ad}_{H_k^j}.}$$
 
 For a **column** wrench this uses an inverse transpose; do not copy that rule blindly to rows. NumPy uses a 1D array, but `W @ Ad` follows the row convention.
 
-Moving the origin changes moment: a force applied at r creates \(\tau=r\times F\). Zero moment depends on origin; a pure couple F=0 acquires no force when the origin changes.
+Moving the origin changes moment: a force applied at r creates $\tau=r\times F$. Zero moment depends on origin; a pure couple F=0 acquires no force when the origin changes.
 
 ## 9. Screw interpretation
 
@@ -188,7 +188,7 @@ For w≠0, any twist decomposes into rotation about an axis and translation alon
 
 $$v=r\times w+\lambda w,\qquad\lambda=\frac{w^Tv}{\|w\|^2},\qquad r=\frac{w\times v}{\|w\|^2}.$$
 
-r is the axis point nearest the origin (rᵀw=0); the full axis is r+αw. Pitch λ is m/rad; translation per turn is 2πλ. At w=0, motion is pure translation: do not divide by \(\|w\|^2\).
+r is the axis point nearest the origin (rᵀw=0); the full axis is r+αw. Pitch λ is m/rad; translation per turn is 2πλ. At w=0, motion is pure translation: do not divide by $\|w\|^2$.
 
 Similarly, for a wrench with F≠0:
 
@@ -202,7 +202,7 @@ For constant spatial twist:
 
 $$\dot H=\widetilde TH,\qquad H(t)=\exp(\widetilde Tt)H(0).$$
 
-For normalized screw axis \(\hat T=(\hat w;v)\), \(\|\hat w\|=1\) and angle q:
+For normalized screw axis $\hat T=(\hat w;v)$, $\|\hat w\|=1$ and angle q:
 
 $$\exp(\widetilde{\hat T}q)=\begin{bmatrix}R(q)&V(q)v\\0&1\end{bmatrix},$$
 
@@ -210,7 +210,7 @@ $$R(q)=I+\sin q\,\widetilde{\hat w}+(1-\cos q)\widetilde{\hat w}^{\,2},$$
 
 $$V(q)=qI+(1-\cos q)\widetilde{\hat w}+(q-\sin q)\widetilde{\hat w}^{\,2}.$$
 
-If w=0 and v is a unit prismatic direction, q is linear displacement: R=I, o=vq. A normalized screw axis differs from a physical twist: \(T=\hat T\dot q\).
+If w=0 and v is a unit prismatic direction, q is linear displacement: R=I, o=vq. A normalized screw axis differs from a physical twist: $T=\hat T\dot q$.
 
 Code `exp_se3(X)` accepts an **integrated** 6-vector X=(φ;ρ), such as TΔt, and uses
 
@@ -234,7 +234,7 @@ A revolute home axis has linear component r×ŵ:
 
 $$\hat T_1^{0,0}\big|_0=\begin{bmatrix}0\\0\\1\\0\\0\\0\end{bmatrix},\quad\hat T_2^{0,1}\big|_0=\begin{bmatrix}1\\0\\0\\0\\\ell_1\\0\end{bmatrix},\quad\hat T_3^{0,2}\big|_0=\begin{bmatrix}1\\0\\0\\0\\\ell_1\\-\ell_2\end{bmatrix}.$$
 
-For compactness call these **constant home axes** A₁,A₂,A₃, abbreviating \(\hat T_i^{0,i-1}|_{q=0}\) without changing the main notation.
+For compactness call these **constant home axes** A₁,A₂,A₃, abbreviating $\hat T_i^{0,i-1}|_{q=0}$ without changing the main notation.
 
 ## 12. Product of Exponentials: forward kinematics
 
@@ -252,11 +252,11 @@ Here Rₓ,R_z are embedded in 4×4 matrices; successive transforms refer to loca
 
 Differentiating PoE gives
 
-$$T_4^{0,0}=J_s(q)\dot q,\qquad J_s=\begin{bmatrix}A_1&\operatorname{Ad}_{E_1}A_2&\operatorname{Ad}_{E_1E_2}A_3\end{bmatrix},$$
+$$T_4^{0,0}=J_s(q)\dot q,\qquad J_s=\begin{bmatrix}A_1&\mathrm{Ad}_{E_1}A_2&\mathrm{Ad}_{E_1E_2}A_3\end{bmatrix},$$
 
-where \(E_i=\exp(\widetilde A_iq_i)\). Transform each joint axis using preceding joints only.
+where $E_i=\exp(\widetilde A_iq_i)$. Transform each joint axis using preceding joints only.
 
-$$T_4^{4,0}=J_b(q)\dot q,\qquad\boxed{J_b=\operatorname{Ad}_{H_0^4}J_s.}$$
+$$T_4^{4,0}=J_b(q)\dot q,\qquad\boxed{J_b=\mathrm{Ad}_{H_0^4}J_s.}$$
 
 Both Jacobians are 6×3 and represent the same relative twist in different frames. Three drives cannot independently prescribe arbitrary six-component pose velocity.
 
@@ -280,7 +280,7 @@ For W in Ψ₄, use Jb or transform W first. Without other loads, holding actuat
 
 ## 14. Examples and verification
 
-1. **Frames and power:** `examples.py` computes Pʲ, twist, and wrench in two frames, checking invariance of \(\mathcal P\).
+1. **Frames and power:** `examples.py` computes Pʲ, twist, and wrench in two frames, checking invariance of $\mathcal P$.
 2. **Screw path:** rotation about z through (0.25;0;0) m with pitch 0.08 m/rad. Initial point (0.55;0;0) follows a radius-0.30 m helix.
 3. **SO(3) structure:** additive Euler versus exponential steps at h=0.05 s, checking ‖RᵀR−I‖ and det R.
 4. **PoE and Jacobians:** compute H₄⁰,Js,Jb,Jp analytically and compare finite differences.
@@ -295,7 +295,7 @@ Slides include draggable 3D scenes, noncommuting rotations, screw parameters, SO
 1. Ψ₂ is rotated +90° around z₁. Express physical vector x₁ in Ψ₂. **Answer:** (0,−1,0).
 2. Why Hᵀ≠H⁻¹ although Rᵀ=R⁻¹? **Answer:** inverse translation is −Rᵀo in the upper-right block.
 3. Find v for w=(0,0,2) rotating around the line through (0.25;0;0). **Answer:** (0;−0.5;0) m/s.
-4. Why is a spatial twist's lower part not tip velocity? Recover \(\dot o=\widetilde wo+v\).
+4. Why is a spatial twist's lower part not tip velocity? Recover $\dot o=\widetilde wo+v$.
 5. Derive the row-W rule from power when Tᵏ=Ad_H Tʲ. **Answer:** Wᵏ=WʲAd_H⁻¹.
 6. Find home Jp columns and explain rank 2. **Answer:** (−(ℓ₂+ℓ₃),0,0), (0,0,ℓ₂+ℓ₃), (0,0,ℓ₃).
 7. Vary the SO(3) integration step. Why can exponential stepping preserve orthogonality at large steps without guaranteeing accuracy for varying velocity?
@@ -323,7 +323,7 @@ When working with formulas, check index directions, matrix inverses and vector c
 | Tᵢʲ˒ʲ | V_s, spatial twist |
 | Tᵢⁱ˒ʲ | V_b, body twist |
 | Wᵢᵏ row | Fₖ column, namely (Wᵢᵏ)ᵀ |
-| Aᵢ=\(\hat T_i^{0,i-1}|_0\) | Sᵢ, spatial home axis |
+| Aᵢ=$\hat T_i^{0,i-1}|_0$ | Sᵢ, spatial home axis |
 
 - Kevin M. Lynch, Frank C. Park, **Modern Robotics: Mechanics, Planning, and Control**, Cambridge University Press, 2017. [Official site](https://modernrobotics.northwestern.edu/).
 - [Chapter 3: Rigid-Body Motions](https://modernrobotics.northwestern.edu/chapters/chapter3/): §3.2 SO(3), angular velocity, exponential coordinates; §3.3 SE(3), twists/exponentials; §3.4 wrenches.

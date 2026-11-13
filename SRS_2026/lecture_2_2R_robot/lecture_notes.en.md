@@ -43,7 +43,7 @@ MuJoCo joint axes are `axis="0 -1 0"`. By the right-hand rule, positive rotation
 | $m_1,m_2$ | 2; 2 | kg |
 | $I_1,I_2$ | $m_i l_i^2/12\approx0.0266667$ | kg·m² |
 | $g$ | 9.81 | m/s² |
-| $D$ | $\operatorname{diag}(0.05,0.05)$ | N·m·s/rad |
+| $D$ | $\mathrm{diag}(0.05,0.05)$ | N·m·s/rad |
 | World shoulder height | 0.3 | m |
 | Each torque limit | $\pm35$ | N·m |
 | Simulation step | 0.002 | s |
@@ -79,10 +79,10 @@ $$c_2=\frac{x_d^2+z_d^2-l_1^2-l_2^2}{2l_1l_2}.$$
 
 If $|c_2|>1$ the point is unreachable. For $|c_2|\leq1$, choose branch $\sigma\in\{-1,+1\}$:
 
-$$s_2=\sigma\sqrt{1-c_2^2},\qquad q_{2d}=\operatorname{atan2}(s_2,c_2),$$
+$$s_2=\sigma\sqrt{1-c_2^2},\qquad q_{2d}=\mathrm{atan2}(s_2,c_2),$$
 
-$$\boxed{q_{1d}=\operatorname{atan2}(z_d,x_d)
--\operatorname{atan2}(l_2s_2,l_1+l_2c_2).}$$
+$$\boxed{q_{1d}=\mathrm{atan2}(z_d,x_d)
+-\mathrm{atan2}(l_2s_2,l_1+l_2c_2).}$$
 
 Usually two elbow configurations exist. Preserve a continuous branch during motion: arbitrary switching causes command jumps. Angles are also equivalent modulo $2\pi$; crossing the `atan2` discontinuity requires unwrapping or consistently choosing a nearby configuration.
 
@@ -286,7 +286,7 @@ $$e=q_d-q,\qquad \dot e=\dot q_d-\dot q.$$
 
 $$\boxed{\tau_{\mathrm{PD}}=K_pe+K_d\dot e.}$$
 
-Here $K_p=\operatorname{diag}(100,60)$ N·m/rad and $K_d=\operatorname{diag}(20,12)$ N·m·s/rad. Compare positions and rates in joint coordinates.
+Here $K_p=\mathrm{diag}(100,60)$ N·m/rad and $K_d=\mathrm{diag}(20,12)$ N·m·s/rad. Compare positions and rates in joint coordinates.
 
 Proportional action creates restoring torque; derivative action suppresses velocity error. For a stationary target without gravity compensation, equilibrium requires
 

@@ -245,7 +245,7 @@ $$\dot y=f(t,y),\qquad y(t_0)=y_0.$$
 Для массы и пружины введём скорость $v=\dot x$ и вектор состояния:
 
 $$y=\begin{bmatrix}x\\v\end{bmatrix},\qquad
-\dot y=\begin{bmatrix}v\\(u(t)-bv-kx-mg)/m\end{bmatrix}.$$
+\dot y=\begin{bmatrix}v\$u(t)-bv-kx-mg)/m\end{bmatrix}.$$
 
 Эквивалентная матричная запись:
 
@@ -295,7 +295,7 @@ $$m\ddot x+kx=-mg,\qquad x(0)=x_0,\quad \dot x(0)=v_0.$$
 $$\boxed{x(t)=x_{\mathrm{eq}}+(x_0-x_{\mathrm{eq}})\cos(\omega_nt)+\frac{v_0}{\omega_n}\sin(\omega_nt),\quad
 x_{\mathrm{eq}}=-\frac{mg}{k},\quad \omega_n=\sqrt{\frac{k}{m}}.}$$
 
-**Проверка подстановкой.** При t=0 получаем x(0)=x₀ и скорость v₀. После двух дифференцирований получаем \(\ddot x=-\omega_n^2(x-x_{\mathrm{eq}})\). Поэтому \(m\ddot x+kx=kx_{\mathrm{eq}}=-mg\): функция действительно решает исходную задачу.
+**Проверка подстановкой.** При t=0 получаем x(0)=x₀ и скорость v₀. После двух дифференцирований получаем \(\ddot x=-\omega_n^2(x-x_{\mathrm{eq}})$. Поэтому $m\ddot x+kx=kx_{\mathrm{eq}}=-mg$: функция действительно решает исходную задачу.
 
 Например, при m=1 кг, k=4 Н/м, g=9.8 м/с², x₀=−1.45 м, v₀=0:
 
@@ -575,7 +575,7 @@ RK4 обычно существенно точнее Эйлера при оди�
 
 Рассмотрим тестовое уравнение
 
-$$\dot y=\lambda y,\qquad \operatorname{Re}\lambda<0.$$
+$$\dot y=\lambda y,\qquad \mathrm{Re}\lambda<0.$$
 
 Точное решение затухает. Численный метод задаёт $y_{n+1}=R(h\lambda)y_n$. Для затухания численного решения необходимо $|R(h\lambda)|<1$.
 

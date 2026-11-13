@@ -247,7 +247,7 @@ $$\dot y=f(t,y),\qquad y(t_0)=y_0.$$
 For the mass and spring, introduce velocity $v=\dot x$ and the state vector:
 
 $$y=\begin{bmatrix}x\\v\end{bmatrix},\qquad
-\dot y=\begin{bmatrix}v\\(u(t)-bv-kx-mg)/m\end{bmatrix}.$$
+\dot y=\begin{bmatrix}v\$u(t)-bv-kx-mg)/m\end{bmatrix}.$$
 
 Equivalent matrix form:
 
@@ -297,7 +297,7 @@ The exact solution is
 $$\boxed{x(t)=x_{\mathrm{eq}}+(x_0-x_{\mathrm{eq}})\cos(\omega_nt)+\frac{v_0}{\omega_n}\sin(\omega_nt),\quad
 x_{\mathrm{eq}}=-\frac{mg}{k},\quad \omega_n=\sqrt{\frac{k}{m}}.}$$
 
-**Verification by substitution.** At t=0, the formula gives x(0)=x₀ and velocity v₀. Differentiating twice gives \(\ddot x=-\omega_n^2(x-x_{\mathrm{eq}})\). Thus \(m\ddot x+kx=kx_{\mathrm{eq}}=-mg\): the function solves the original initial-value problem.
+**Verification by substitution.** At t=0, the formula gives x(0)=x₀ and velocity v₀. Differentiating twice gives \(\ddot x=-\omega_n^2(x-x_{\mathrm{eq}})$. Thus $m\ddot x+kx=kx_{\mathrm{eq}}=-mg$: the function solves the original initial-value problem.
 
 For example, with m=1 kg, k=4 N/m, g=9.8 m/s², x₀=−1.45 m and v₀=0:
 
@@ -577,7 +577,7 @@ Adaptive schemes, such as embedded order-5/4 pairs, estimate error and adjust th
 
 Consider the test equation
 
-$$\dot y=\lambda y,\qquad \operatorname{Re}\lambda<0.$$
+$$\dot y=\lambda y,\qquad \mathrm{Re}\lambda<0.$$
 
 Its exact solution decays. A numerical method gives $y_{n+1}=R(h\lambda)y_n$. Numerical decay requires $|R(h\lambda)|<1$.
 

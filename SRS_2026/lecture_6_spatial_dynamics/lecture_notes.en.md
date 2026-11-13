@@ -26,7 +26,7 @@ Notation and conventions:
 | N(q) | Gravity vector ∂P/∂q, also G(q) in the source |
 | C(q,q̇), c=Cq̇ | n×n matrix and corresponding n×1 vector |
 
-Full indices are \(H_i^j,T_i^{k,j},I^{k,i},P^{k,i}\). Power is \(\mathcal P\) and homogeneous point \(\mathsf P\), distinct from momentum P and potential P(q). Python `tau` represents column τₐᵀ.
+Full indices are $H_i^j,T_i^{k,j},I^{k,i},P^{k,i}$. Power is $\mathcal P$ and homogeneous point $\mathsf P$, distinct from momentum P and potential P(q). Python `tau` represents column τₐᵀ.
 
 Relative to planar Lectures 2 and 4, N=G and B=D are renamings with unchanged meaning/sign. Their torque vector τ corresponds to our column τₐᵀ; row τₐ follows the original spatial lectures' dual convention.
 
@@ -42,7 +42,7 @@ Spatial inertia differs from joint M(q). The former maps one body's 6D velocity 
 
 ### Expressing inertia in another frame
 
-Let \(T^k=A T^c\) with \(A=\operatorname{Ad}_{H_c^k}\). Energy invariance gives
+Let $T^k=A T^c$ with $A=\mathrm{Ad}_{H_c^k}$. Energy invariance gives
 
 $$\boxed{I^{k,i}=A^{-T}I^{c,i}A^{-1}.}$$
 
@@ -58,7 +58,7 @@ $$\boxed{(P^{k,i})^T=I^{k,i}T_i^{k,0}.}$$
 
 Momentum is dual to twist and transforms like a wrench. Changing only expression frame gives
 
-$$P^{k,i}=P^{c,i}\operatorname{Ad}_{H_k^c}.$$
+$$P^{k,i}=P^{c,i}\mathrm{Ad}_{H_k^c}.$$
 
 In an inertial frame with fixed origin:
 
@@ -70,17 +70,17 @@ In a rotating body frame, the ordinary derivative of momentum components is not 
 
 For T=(w;v), define
 
-$$\operatorname{ad}_T=\begin{bmatrix}\widetilde w&0\\\widetilde v&\widetilde w\end{bmatrix},\qquad\operatorname{ad}_T T=0.$$
+$$\mathrm{ad}_T=\begin{bmatrix}\widetilde w&0\\\widetilde v&\widetilde w\end{bmatrix},\qquad\mathrm{ad}_T T=0.$$
 
 Large Ad changes expression frames; small ad describes algebraic interaction of instantaneous motions. Both are 6×6 but have different origins.
 
 Let Ψᵢ be body-fixed, I=Iⁱ˒ⁱ constant, and T=Tᵢⁱ˒⁰. Then
 
-$$\boxed{\dot P=P\operatorname{ad}_T+W,}$$
+$$\boxed{\dot P=P\mathrm{ad}_T+W,}$$
 
 or in column form,
 
-$$\boxed{I\dot T-\operatorname{ad}_T^TIT=W^T.}$$
+$$\boxed{I\dot T-\mathrm{ad}_T^TIT=W^T.}$$
 
 Check the sign using a CoM frame. For I=diag(J,mI),
 
@@ -92,9 +92,9 @@ Here v uses rotating CoM coordinates. In an inertial frame the CoM equation is m
 
 ### Energy and zero gyroscopic power
 
-$$\dot K=T^TI\dot T=T^TW^T+T^T\operatorname{ad}_T^TIT=W T,$$
+$$\dot K=T^TI\dot T=T^TW^T+T^T\mathrm{ad}_T^TIT=W T,$$
 
-because \(T^T\operatorname{ad}_T^T=(\operatorname{ad}_TT)^T=0\). Gyroscopic coupling changes motion direction without generating or dissipating energy. Zero power does not mean the term can be omitted.
+because $T^T\mathrm{ad}_T^T=(\mathrm{ad}_TT)^T=0$. Gyroscopic coupling changes motion direction without generating or dissipating energy. Zero power does not mean the term can be omitted.
 
 ## 5. Free rotation and the intermediate axis
 
@@ -118,13 +118,13 @@ $$T_i^{0,0}=J_i(q)\dot q.$$
 
 Only columns through joint i are nonzero. Later joints do not move earlier links. Express velocity in the body-fixed CoM frame:
 
-$$T_i^{c_i,0}=\operatorname{Ad}_{H_0^{c_i}}J_i\dot q=:J_{b,i}\dot q.$$
+$$T_i^{c_i,0}=\mathrm{Ad}_{H_0^{c_i}}J_i\dot q=:J_{b,i}\dot q.$$
 
 Then
 
 $$K=\sum_iK_i=\frac12\dot q^T\left(\sum_iJ_{b,i}^TI^{c_i,i}J_{b,i}\right)\dot q,$$
 
-$$\boxed{M(q)=\sum_iJ_i^T\operatorname{Ad}_{H_0^{c_i}}^TI^{c_i,i}\operatorname{Ad}_{H_0^{c_i}}J_i.}$$
+$$\boxed{M(q)=\sum_iJ_i^T\mathrm{Ad}_{H_0^{c_i}}^TI^{c_i,i}\mathrm{Ad}_{H_0^{c_i}}J_i.}$$
 
 Dimensions: Jᵢ is 6×n, I is 6×6, M is n×n. Independent coordinates and physical nonzero inertias give symmetric positive-definite M. An entry Mᵢⱼ is not a link mass; it contributes to generalized-velocity energy.
 
@@ -148,7 +148,7 @@ $$\sum_jM_{ij}\ddot q_j+\sum_{j,k}\Gamma_{ijk}\dot q_j\dot q_k+\frac{\partial P}
 
 $$\Gamma_{ijk}=\frac12\left(\frac{\partial M_{ij}}{\partial q_k}+\frac{\partial M_{ik}}{\partial q_j}-\frac{\partial M_{jk}}{\partial q_i}\right).$$
 
-Define \(C_{ij}=\sum_k\Gamma_{ijk}\dot q_k\), so c=Cq̇. C is a matrix; c a vector. Prescribing Cq̇ alone does not uniquely determine C; we use the standard Christoffel construction.
+Define $C_{ij}=\sum_k\Gamma_{ijk}\dot q_k$, so c=Cq̇. C is a matrix; c a vector. Prescribing Cq̇ alone does not uniquely determine C; we use the standard Christoffel construction.
 
 ## 9. Full dynamics and energy check
 
@@ -208,7 +208,7 @@ $$N=\begin{bmatrix}0\\g(m_2r_2+m_3\ell_2)\cos q_2+m_3gr_3\cos\alpha\\m_3gr_3\cos
 
 ### Feedback linearization
 
-Let \(e=\bar q-q\) as in source Chapter 7. Choose
+Let $e=\bar q-q$ as in source Chapter 7. Choose
 
 $$u=\ddot{\bar q}+K_v\dot e+K_pe,$$
 
@@ -224,9 +224,9 @@ For desired **robot-on-environment** wrench W_des in quasistatic contact, comman
 
 Consider spatial elasticity defined by a potential without cross-coupling between rotation and translation. Target (R_d,p_d) is constant and reachable. Let R=R₄⁰, p=o₄⁰:
 
-$$U_s=\frac{k_p}{2}\|p-p_d\|^2+\frac{k_o}{2}\operatorname{tr}(I-R_d^TR).$$
+$$U_s=\frac{k_p}{2}\|p-p_d\|^2+\frac{k_o}{2}\mathrm{tr}(I-R_d^TR).$$
 
-$$e_R=\frac12\operatorname{vee}(R_d^TR-R^TR_d),\qquad F_s=-k_p(p-p_d)-d_p\dot p,$$
+$$e_R=\frac12\mathrm{vee}(R_d^TR-R^TR_d),\qquad F_s=-k_p(p-p_d)-d_p\dot p,$$
 
 $$\tau_{\rm tip}^0=-k_oR e_R-d_o w_4^{0,0}.$$
 
